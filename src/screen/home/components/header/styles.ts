@@ -1,6 +1,6 @@
 import styled from "styled-components/native";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-export const Header = styled.View`
+export const Container = styled.View`
     width: 100%;
     height: 100px;
     background-color: ${(props) => props.theme.colors.header};
@@ -8,13 +8,6 @@ export const Header = styled.View`
     align-items: flex-end;
     justify-content: space-around;
 `
-export const Container = styled.View`
-    flex: 1;
-    background-color: ${(props) => props.theme.colors.background};
-    align-items: center;
-    justify-content: center;
-`;
-
 export const Title = styled.Text`
     font-size: 20px;
     font-weight: bold;
