@@ -5,6 +5,7 @@ import { Switch, TouchableOpacity, useColorScheme } from "react-native";
 import { ThemeContext, ThemeType } from "../../theme/theme";
 
 import { Header } from "./components/header/Header";
+import { Player } from "./components/player/Player";
 
 
 export const Home = () => {
@@ -15,8 +16,9 @@ export const Home = () => {
   return (<>
     <Header />
     <Container>
-      <Switch value={isDarkMode} onValueChange={toggleTheme} />
-      <Title>Munchkin</Title>
+      <Player />
+      {/* <Switch value={isDarkMode} onValueChange={toggleTheme} />
+      <Title>Munchkin</Title> */}
     </Container>
   </>
   )
