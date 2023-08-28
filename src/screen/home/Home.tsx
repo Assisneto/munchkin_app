@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { Container, Title } from "./styles";
 
-import { Switch, TouchableOpacity, useColorScheme } from "react-native";
+import { FlatList, Switch, TouchableOpacity, useColorScheme } from "react-native";
 import { ThemeContext, ThemeType } from "../../theme/theme";
 
 import { Header } from "./components/header/Header";
@@ -16,7 +16,12 @@ export const Home = () => {
   return (<>
     <Header />
     <Container>
-      <Player />
+      <FlatList
+        data={[1, 2, 3, 4, 5]}
+        renderItem={() => <Player />}
+
+      />
+
       {/* <Switch value={isDarkMode} onValueChange={toggleTheme} />
       <Title>Munchkin</Title> */}
     </Container>

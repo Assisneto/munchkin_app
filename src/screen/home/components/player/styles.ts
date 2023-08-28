@@ -6,6 +6,7 @@ export const Container = styled.View`
   height: 50px;
   flex-direction: row;
   justify-content: space-between;
+  margin-top: 18px;
 `
 
 export const Circle = styled.View`
