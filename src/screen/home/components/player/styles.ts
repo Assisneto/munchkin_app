@@ -12,7 +12,7 @@ export const Container = styled.View`
 export const Circle = styled.View`
   width: 50px;
   height: 50px;
-  border-radius: 100%;
+  border-radius: 50px;
   background-color: green;
   align-items: center;
   justify-content: center;

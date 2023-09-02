@@ -1,28 +1,34 @@
 import { useContext } from "react";
 
-// import { TouchableOpacity } from "react-native";
+import { Gender } from "../../../../components/gender";
 
 import { Circle, Container, Icons, Letter, Name, NameSexContainer, Point, RowContainer, Wrapper } from "./styles";
 
+type Props = {
+  name: string;
+  gender: string;
+  power: number;
+  level: number;
+}
 
+const firstLetter = (name: string): string => name.charAt(0).toUpperCase()
 
-export const Player = () => {
-
+export const Player = ({ gender, level, name, power }: Props) => {
   return (<Container >
     <RowContainer>
       <Circle >
-        <Letter>A</Letter>
+        <Letter>{firstLetter(name)}</Letter>
       </Circle>
       <NameSexContainer>
-        <Name>Assis</Name>
-        <Icons name="gender-male" size={18} />
+        <Name>{name}</Name>
+        <Gender gender={gender} />
       </NameSexContainer>
     </RowContainer>
     <RowContainer>
-      <Point>1</Point>
+      <Point>{level}</Point>
       <Icons name="chevron-up" size={28} />
       <Wrapper>
-        <Point>1</Point>
+        <Point>{power}</Point>
         <Icons name="sword" size={28} />
       </Wrapper>
     </RowContainer>
