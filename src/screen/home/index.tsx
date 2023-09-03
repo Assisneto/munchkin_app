@@ -6,6 +6,7 @@ import { ThemeContext, ThemeType } from "../../theme/theme";
 
 import { Header } from "./components/header";
 import { Player } from "./components/player";
+import { useNavigation } from "@react-navigation/native";
 
 const player = {
   name: "assisneto",
@@ -23,6 +24,12 @@ const player2 = {
 
 export const Home = () => {
   const { toggleTheme, theme } = useContext(ThemeContext)
+  const navigation = useNavigation();
+
+  const handleNewPlayer = () => {
+    navigation.navigate('newPlayer')
+  }
+
   return (<>
     <Header />
     <Container>
@@ -31,7 +38,7 @@ export const Home = () => {
         renderItem={({ item }) => <Player gender={item.gender} level={item.level} name={item.name} power={item.power} />}
         contentContainerStyle={{ paddingBottom: 100 }}
       />
-      <Circle >
+      <Circle onPress={handleNewPlayer}>
         <CircleTitle>+</CircleTitle>
       </Circle>
       {/* <Switch value={isDarkMode} onValueChange={toggleTheme} />
