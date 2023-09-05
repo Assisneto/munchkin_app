@@ -14,7 +14,7 @@ export const Title = styled.Text`
   padding-left: 20px;
   font-size: 20px;
   font-weight: bold;
-  color: ${(props) => props.theme.colors.text};
+  color: ${(props) => props.theme.colors.headerText};
 `;
 
 export const Options = styled.View`

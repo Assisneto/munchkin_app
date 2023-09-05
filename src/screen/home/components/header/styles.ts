@@ -12,7 +12,7 @@ export const Container = styled.View`
 export const Title = styled.Text`
   font-size: 20px;
   font-weight: bold;
-  color: ${(props) => props.theme.colors.text};
+  color: ${(props) => props.theme.colors.headerText};
   padding-bottom: 10px;
 `;
 
