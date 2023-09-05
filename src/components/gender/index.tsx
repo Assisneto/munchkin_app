@@ -1,12 +1,12 @@
-import React from 'react';
+import React from "react";
 
-import { Icons } from './styles';
+import { Icons } from "./styles";
 
 type Props = {
-  gender: string
-}
+  gender: string;
+};
 
 export const Gender = ({ gender }: Props) => {
-  if (gender === "male") return <Icons name="gender-male" size={18} />
-  return <Icons name="gender-female" size={18} />
-}
+  if (gender === "male") return <Icons name="gender-male" size={18} />;
+  return <Icons name="gender-female" size={18} />;
+};

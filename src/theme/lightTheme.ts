@@ -6,5 +6,5 @@ export const lightTheme: DefaultTheme = {
     text: "#000",
     header: "#8B4513",
     iconColor: "#fff",
-  }
-}
+  },
+};
