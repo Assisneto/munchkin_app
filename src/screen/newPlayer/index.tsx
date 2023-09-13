@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Header } from "./component/header";
 import {
   Container,
@@ -9,47 +9,55 @@ import {
   GenderContainer,
   RadioButton,
 } from "./styles";
+import { savePlayer } from "../../storage/player/player";
 
 const MALE = "male";
 const FEMALE = "female";
 
 export const NewPlayer = () => {
-  const [sex, setSex] = useState<string>(FEMALE);
-  const [name, setName] = useState<string>();
+  const [gender, setGender] = useState<string>(MALE);
+  const [name, setName] = useState<string>("");
+
+  const newPlayer = async () => {
+    await savePlayer({
+      gender,
+      name,
+      level: 0,
+      power: 0,
+    });
+  };
+
   return (
     <Container>
-      <Header />
+      <Header savePlayer={newPlayer} />
       <Body>
-        <Name
-          placeholder="Nome"
-          onSubmitEditing={(value) => setName(value.nativeEvent.text)}
-        />
+        <Name placeholder="Nome" onChangeText={(value) => setName(value)} />
         <BodyText>Genero</BodyText>
         <GenderContainer
           onPress={() => {
-            setSex(MALE);
+            setGender(MALE);
           }}
         >
           <GenderIcon gender={MALE} size={30} />
           <RadioButton
             value={MALE}
-            status={sex === MALE ? "checked" : "unchecked"}
+            status={gender === MALE ? "checked" : "unchecked"}
             onPress={() => {
-              setSex(MALE);
+              setGender(MALE);
             }}
           />
         </GenderContainer>
         <GenderContainer
           onPress={() => {
-            setSex(FEMALE);
+            setGender(FEMALE);
           }}
         >
           <GenderIcon gender={FEMALE} size={30} />
           <RadioButton
             value={FEMALE}
-            status={sex === FEMALE ? "checked" : "unchecked"}
+            status={gender === FEMALE ? "checked" : "unchecked"}
             onPress={() => {
-              setSex(FEMALE);
+              setGender(FEMALE);
             }}
           />
         </GenderContainer>

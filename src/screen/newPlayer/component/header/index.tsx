@@ -4,7 +4,7 @@ import { TouchableOpacity } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
 
-export const Header = () => {
+export const Header = ({ savePlayer }: { savePlayer: () => void }) => {
   const navigation = useNavigation();
   const backToHome = () => {
     navigation.goBack();
@@ -18,7 +18,12 @@ export const Header = () => {
           <Title>Novo Munchkin</Title>
         </AlignWrapper>
         <Options>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={async () => {
+              await savePlayer();
+              backToHome();
+            }}
+          >
             <Icons name="check" size={30} />
           </TouchableOpacity>
         </Options>

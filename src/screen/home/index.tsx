@@ -1,55 +1,50 @@
-import { useContext } from "react";
+import { useCallback, useContext, useState } from "react";
 import { Circle, CircleTitle, Container } from "./styles";
 
-import {
-  FlatList,
-  Switch,
-  TouchableOpacity,
-  useColorScheme,
-} from "react-native";
+import { FlatList } from "react-native";
 import { ThemeContext, ThemeType } from "../../theme/theme";
 
 import { Header } from "./components/header";
 import { Player } from "./components/player";
-import { useNavigation } from "@react-navigation/native";
-
-const player = {
-  name: "assisneto",
-  gender: "male",
-  power: 1,
-  level: 1,
-};
-
-const player2 = {
-  name: "maria",
-  gender: "female",
-  power: 10,
-  level: 8,
-};
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { getPlayers, playerType } from "../../storage/player/player";
 
 export const Home = () => {
   const { toggleTheme, theme } = useContext(ThemeContext);
   const navigation = useNavigation();
-
+  const [players, setPlayers] = useState<playerType[] | []>();
   const handleNewPlayer = () => {
     navigation.navigate("newPlayer");
   };
+  const fetchPlayer = async () => {
+    const players = await getPlayers();
+    return setPlayers(players);
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchPlayer();
+    }, [])
+  );
 
   return (
     <>
       <Header />
       <Container>
         <FlatList
-          data={[player, player2, player, player2, player]}
-          renderItem={({ item }) => (
-            <Player
-              gender={item.gender}
-              level={item.level}
-              name={item.name}
-              power={item.power}
-            />
-          )}
+          data={players}
+          renderItem={({ item }) => {
+            return (
+              <Player
+                gender={item.gender}
+                level={item.level}
+                name={item.name}
+                power={item.power}
+              />
+            );
+          }}
           contentContainerStyle={{ paddingBottom: 100 }}
+          ListEmptyComponent={<></>}
         />
         <Circle onPress={handleNewPlayer}>
           <CircleTitle>+</CircleTitle>
