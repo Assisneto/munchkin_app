@@ -1,14 +1,9 @@
-import { useContext } from "react";
 import { Container, Icons, Options, Title } from "./styles";
 
 import { TouchableOpacity } from "react-native";
-import { ThemeContext, ThemeType } from "../../../../theme/theme";
 
 export const Header = () => {
-  const { toggleTheme, theme } = useContext(ThemeContext);
   const ICONSIZE = 26;
-  const isDarkMode = theme === ThemeType.dark;
-  // const theme = useColorScheme()
   return (
     <>
       <Container>

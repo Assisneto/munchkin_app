@@ -5,7 +5,7 @@ import { FlatList } from "react-native";
 import { ThemeContext, ThemeType } from "../../theme/theme";
 
 import { Header } from "./components/header";
-import { Player } from "./components/player";
+import { Player } from "../../components/player";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import {
   deletePlayerByName,

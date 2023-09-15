@@ -1,4 +1,4 @@
-import { Gender } from "../../../../components/gender";
+import { Gender } from "../gender";
 import { Swipeable } from "react-native-gesture-handler";
 import {
   Circle,
@@ -13,6 +13,7 @@ import {
   DeleteContainer,
   DeleteText,
 } from "./styles";
+import { useNavigation } from "@react-navigation/native";
 
 type Props = {
   name: string;
@@ -36,10 +37,16 @@ const deleteComponent = (
 };
 
 export const Player = ({ gender, level, name, power, deletePlayer }: Props) => {
+  const navigation = useNavigation();
+
+  const handleEditPlayer = () => {
+    navigation.navigate("editPlayer");
+  };
+
   return (
     <Swipeable renderRightActions={() => deleteComponent(deletePlayer, name)}>
       <Container>
-        <RowContainer>
+        <RowContainer onPress={handleEditPlayer}>
           <Circle>
             <Letter>{firstLetter(name)}</Letter>
           </Circle>
@@ -48,7 +55,7 @@ export const Player = ({ gender, level, name, power, deletePlayer }: Props) => {
             <Gender gender={gender} />
           </NameSexContainer>
         </RowContainer>
-        <RowContainer>
+        <RowContainer onPress={handleEditPlayer}>
           <Point>{level}</Point>
           <Icons name="chevron-up" size={28} />
           <Wrapper>
