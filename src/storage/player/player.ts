@@ -17,4 +17,12 @@ async function getPlayers(): Promise<playerType[]> {
   return await loadFromLocalStorage("player");
 }
 
-export { savePlayer, getPlayers, playerType };
+async function deletePlayerByName(name: string) {
+  const players = await getPlayers();
+
+  const updatedPlayers = players.filter((player) => player.name !== name);
+
+  await saveToLocalStorage("player", updatedPlayers);
+}
+
+export { savePlayer, getPlayers, deletePlayerByName, playerType };

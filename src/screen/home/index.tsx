@@ -7,7 +7,11 @@ import { ThemeContext, ThemeType } from "../../theme/theme";
 import { Header } from "./components/header";
 import { Player } from "./components/player";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { getPlayers, playerType } from "../../storage/player/player";
+import {
+  deletePlayerByName,
+  getPlayers,
+  playerType,
+} from "../../storage/player/player";
 
 export const Home = () => {
   const { toggleTheme, theme } = useContext(ThemeContext);
@@ -17,6 +21,12 @@ export const Home = () => {
     navigation.navigate("newPlayer");
   };
   const fetchPlayer = async () => {
+    const players = await getPlayers();
+    return setPlayers(players);
+  };
+
+  const deletePlayer = async (name: string) => {
+    await deletePlayerByName(name);
     const players = await getPlayers();
     return setPlayers(players);
   };
@@ -40,6 +50,7 @@ export const Home = () => {
                 level={item.level}
                 name={item.name}
                 power={item.power}
+                deletePlayer={deletePlayer}
               />
             );
           }}

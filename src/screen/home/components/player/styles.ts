@@ -49,3 +49,18 @@ export const Wrapper = styled.View`
   flex-direction: row;
   align-items: center;
 `;
+
+export const DeleteContainer = styled.TouchableOpacity`
+  background-color: red;
+  justify-content: center;
+  margin-top: 18px;
+  border-radius: 10px;
+  margin-left: 5px;
+`;
+
+export const DeleteText = styled.Text`
+  font-size: 20px;
+  color: ${(props) => props.theme.colors.text};
+  font-weight: 400;
+  padding: 0 10px;
+`;
