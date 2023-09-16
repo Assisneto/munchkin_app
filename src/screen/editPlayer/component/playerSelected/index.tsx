@@ -1,76 +1,52 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-import {
-  Container,
-  Name,
-  Title,
-  Number,
-  RowContainer,
-  SubNumber,
-  ColumnContainer,
-  SubTitle,
-  Icons,
-  IconContainer,
-} from "./styles";
+import { Container, Name, Title, Number, RowContainer } from "./styles";
 import { Gender } from "../../../../components/gender";
-import { TouchableOpacity } from "react-native-gesture-handler";
 
-import { playerType } from "../../../../storage/player/player";
-
-const ICONSIZE = 56;
+import { editPlayer, playerType } from "../../../../storage/player/player";
+import { StatAdjuster } from "./statAdjuster";
 
 type Props = {
-  player: playerType;
+  initialPlayer: playerType;
 };
+type PointKey = "level" | "power";
 
-export const PlayerSelected = ({ player }: Props) => {
+export const PlayerSelected = ({ initialPlayer }: Props) => {
+  const [player, setPlayer] = useState<playerType>(initialPlayer);
+
+  useEffect(() => {
+    setPlayer(initialPlayer);
+  }, [initialPlayer]);
+
+  const addPoint = async (key: PointKey, amount: number) => {
+    const updatedPlayer = {
+      ...player,
+      [key]: player[key] + amount,
+    };
+
+    await editPlayer(updatedPlayer);
+    setPlayer(updatedPlayer);
+  };
+
   return (
     <Container>
-      <Name>{player?.name}</Name>
+      <Name>{player.name}</Name>
       <Title>Força</Title>
       <Number>{player.level + player.power}</Number>
       <Gender gender={player.gender} size={30} />
       <RowContainer>
-        <ColumnContainer>
-          <SubTitle>Nível</SubTitle>
-          <SubNumber>{player.level}</SubNumber>
-          <IconContainer>
-            <TouchableOpacity
-              onPress={() => {
-                /* Adicione a ação desejada aqui */
-              }}
-            >
-              <Icons name="arrow-drop-down" size={ICONSIZE} />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                /* Adicione a ação desejada aqui */
-              }}
-            >
-              <Icons name="arrow-drop-up" size={ICONSIZE} />
-            </TouchableOpacity>
-          </IconContainer>
-        </ColumnContainer>
-        <ColumnContainer>
-          <SubTitle>Equip</SubTitle>
-          <SubNumber>{player.power}</SubNumber>
-          <IconContainer>
-            <TouchableOpacity
-              onPress={() => {
-                /* Adicione a ação desejada aqui */
-              }}
-            >
-              <Icons name="arrow-drop-down" size={ICONSIZE} />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                /* Adicione a ação desejada aqui */
-              }}
-            >
-              <Icons name="arrow-drop-up" size={ICONSIZE} />
-            </TouchableOpacity>
-          </IconContainer>
-        </ColumnContainer>
+        <StatAdjuster
+          title="Nível"
+          value={player.level}
+          adjustValue={addPoint}
+          keyName="level"
+        />
+        <StatAdjuster
+          title="Equip"
+          value={player.power}
+          adjustValue={addPoint}
+          keyName="power"
+        />
       </RowContainer>
     </Container>
   );

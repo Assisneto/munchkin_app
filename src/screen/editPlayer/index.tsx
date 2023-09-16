@@ -70,7 +70,7 @@ export const EditPlayer = () => {
     <>
       <Header />
       <Container>
-        <PlayerSelected player={player} />
+        <PlayerSelected initialPlayer={player} />
         <FlatList
           data={players}
           renderItem={({ item }) => {
