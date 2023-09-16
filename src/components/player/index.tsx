@@ -40,7 +40,7 @@ export const Player = ({ gender, level, name, power, deletePlayer }: Props) => {
   const navigation = useNavigation();
 
   const handleEditPlayer = () => {
-    navigation.navigate("editPlayer");
+    navigation.navigate("editPlayer", { name });
   };
 
   return (
