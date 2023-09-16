@@ -25,4 +25,14 @@ async function deletePlayerByName(name: string) {
   await saveToLocalStorage("player", updatedPlayers);
 }
 
-export { savePlayer, getPlayers, deletePlayerByName, playerType };
+async function editPlayer(updatedPlayer: playerType) {
+  const players = await getPlayers();
+
+  const updatedPlayers = players.map((player) =>
+    player.name === updatedPlayer.name ? updatedPlayer : player
+  );
+
+  await saveToLocalStorage("player", updatedPlayers);
+}
+
+export { savePlayer, getPlayers, deletePlayerByName, editPlayer, playerType };
