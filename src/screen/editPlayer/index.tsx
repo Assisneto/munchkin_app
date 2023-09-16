@@ -63,7 +63,7 @@ export const EditPlayer = () => {
   useFocusEffect(
     useCallback(() => {
       showPlayers();
-    }, [])
+    }, [name])
   );
 
   return (

@@ -39,13 +39,11 @@ const deleteComponent = (
 export const Player = ({ gender, level, name, power, deletePlayer }: Props) => {
   const navigation = useNavigation();
 
-  const handleEditPlayer = () => {
-    navigation.navigate("editPlayer", { name });
-  };
+  const handleEditPlayer = () => navigation.navigate("editPlayer", { name });
 
   return (
     <Swipeable renderRightActions={() => deleteComponent(deletePlayer, name)}>
-      <Container>
+      <Container onPress={handleEditPlayer}>
         <RowContainer onPress={handleEditPlayer}>
           <Circle>
             <Letter>{firstLetter(name)}</Letter>
