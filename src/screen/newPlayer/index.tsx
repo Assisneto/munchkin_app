@@ -24,7 +24,7 @@ export const NewPlayer = () => {
     await savePlayer({
       gender,
       name,
-      level: 0,
+      level: 1,
       power: 0,
     });
   };

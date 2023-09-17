@@ -18,14 +18,17 @@ export const PlayerSelected = ({ initialPlayer }: Props) => {
     setPlayer(initialPlayer);
   }, [initialPlayer]);
 
-  const addPoint = async (key: PointKey, amount: number) => {
+  const handlerEdit = async (key: PointKey, amount: number) => {
     const updatedPlayer = {
       ...player,
       [key]: player[key] + amount,
     };
-
-    await editPlayer(updatedPlayer);
-    setPlayer(updatedPlayer);
+    try {
+      await editPlayer(updatedPlayer);
+      setPlayer(updatedPlayer);
+    } catch (error) {
+      return;
+    }
   };
 
   return (
@@ -38,13 +41,13 @@ export const PlayerSelected = ({ initialPlayer }: Props) => {
         <StatAdjuster
           title="Nível"
           value={player.level}
-          adjustValue={addPoint}
+          adjustValue={handlerEdit}
           keyName="level"
         />
         <StatAdjuster
           title="Equip"
           value={player.power}
-          adjustValue={addPoint}
+          adjustValue={handlerEdit}
           keyName="power"
         />
       </RowContainer>

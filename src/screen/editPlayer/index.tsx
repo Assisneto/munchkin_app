@@ -37,7 +37,7 @@ export const EditPlayer = () => {
   const [player, setPlayer] = useState<playerType>({
     name: "",
     gender: "",
-    level: 0,
+    level: 1,
     power: 0,
   });
 
