@@ -9,6 +9,13 @@ type playerType = {
 
 async function savePlayer(player: playerType) {
   const players = await getPlayers();
+  if (!player.name.trim()) {
+    throw new Error("O nome do jogador não pode ser vazio!");
+  }
+
+  if (players.some((existingPlayer) => existingPlayer.name === player.name)) {
+    throw new Error("Um jogador com esse nome já existe!");
+  }
 
   await saveToLocalStorage("player", [...players, player]);
 }

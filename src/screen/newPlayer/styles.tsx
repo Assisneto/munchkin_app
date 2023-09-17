@@ -44,3 +44,9 @@ export const RadioButton = styled(RadioButtonPaper).attrs((props) => ({
   color: `${props.theme.colors.header}`,
   uncheckedColor: `${props.theme.colors.headerText}`,
 }))``;
+
+export const ErrorText = styled.Text`
+  color: red;
+  font-size: 15px;
+  padding-top: 15px;
+`;

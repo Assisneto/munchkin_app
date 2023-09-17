@@ -4,7 +4,13 @@ import { TouchableOpacity } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
 
-export const Header = ({ savePlayer }: { savePlayer: () => void }) => {
+export const Header = ({
+  savePlayer,
+  showError,
+}: {
+  savePlayer: () => void;
+  showError: (error: string) => void;
+}) => {
   const navigation = useNavigation();
   const backToHome = () => {
     navigation.goBack();
@@ -20,8 +26,16 @@ export const Header = ({ savePlayer }: { savePlayer: () => void }) => {
         <Options>
           <TouchableOpacity
             onPress={async () => {
-              await savePlayer();
-              backToHome();
+              try {
+                await savePlayer();
+                backToHome();
+              } catch (error) {
+                if (error instanceof Error) {
+                  showError(error.message);
+                } else {
+                  showError("Ocorreu um erro desconhecido.");
+                }
+              }
             }}
           >
             <Icons name="check" size={30} />

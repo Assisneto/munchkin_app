@@ -8,6 +8,7 @@ import {
   BodyText,
   GenderContainer,
   RadioButton,
+  ErrorText,
 } from "./styles";
 import { savePlayer } from "../../storage/player/player";
 
@@ -17,6 +18,7 @@ const FEMALE = "female";
 export const NewPlayer = () => {
   const [gender, setGender] = useState<string>(MALE);
   const [name, setName] = useState<string>("");
+  const [showError, setShowError] = useState<string>("");
 
   const newPlayer = async () => {
     await savePlayer({
@@ -29,9 +31,16 @@ export const NewPlayer = () => {
 
   return (
     <Container>
-      <Header savePlayer={newPlayer} />
+      <Header savePlayer={newPlayer} showError={setShowError} />
       <Body>
-        <Name placeholder="Nome" onChangeText={(value) => setName(value)} />
+        <Name
+          placeholder="Nome"
+          onChangeText={(value) => {
+            setName(value);
+            showError ? setShowError("") : "";
+          }}
+        />
+        {showError && <ErrorText>{showError}</ErrorText>}
         <BodyText>Genero</BodyText>
         <GenderContainer
           onPress={() => {
