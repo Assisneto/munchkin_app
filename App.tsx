@@ -1,10 +1,13 @@
-import { Home } from "./src/screen/home";
 import { ThemeProvider } from "./src/theme/theme";
+import { SocketProvider } from "./src/socket/socket";
 import { Routes } from "./src/routes";
+
 export default function App() {
   return (
     <ThemeProvider>
-      <Routes />
+      <SocketProvider>
+        <Routes />
+      </SocketProvider>
     </ThemeProvider>
   );
 }
