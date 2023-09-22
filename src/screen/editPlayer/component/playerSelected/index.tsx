@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import { Container, Name, Title, Number, RowContainer } from "./styles";
 import { Gender } from "../../../../components/gender";
 
 import { editPlayer, playerType } from "../../../../storage/player/player";
 import { StatAdjuster } from "./statAdjuster";
+import { useSocket } from "../../../../hooks/useSocket";
+import { executeBySocketType } from "../../../../utils/typeSocketHandle";
+import { SocketContext, SocketType } from "../../../../socket/socket";
 
 type Props = {
   initialPlayer: playerType;
@@ -13,6 +16,8 @@ type PointKey = "level" | "power";
 
 export const PlayerSelected = ({ initialPlayer }: Props) => {
   const [player, setPlayer] = useState<playerType>(initialPlayer);
+  const { channel } = useSocket("room:lobby");
+  const { socketState } = useContext(SocketContext);
 
   useEffect(() => {
     setPlayer(initialPlayer);
@@ -26,6 +31,12 @@ export const PlayerSelected = ({ initialPlayer }: Props) => {
     try {
       await editPlayer(updatedPlayer);
       setPlayer(updatedPlayer);
+
+      if (channel) {
+        executeBySocketType(socketState, SocketType.HOST, () => {
+          channel.push("edit_player", updatedPlayer);
+        });
+      }
     } catch (error) {
       return;
     }

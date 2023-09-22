@@ -9,6 +9,7 @@ import { Player } from "../../components/player";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import {
   deletePlayerByName,
+  editPlayer,
   getPlayers,
   playerType,
   savePlayer,
@@ -62,6 +63,10 @@ export const Home = () => {
       if (channel) {
         channel.on("create_player", (player) => {
           handleSavePlayer(player);
+        });
+        channel.on("edited_player", async (editedPlayer) => {
+          await editPlayer(editedPlayer);
+          await fetchPlayer();
         });
       }
     });
