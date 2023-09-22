@@ -36,7 +36,7 @@ async function editPlayer(updatedPlayer: playerType) {
   if (updatedPlayer.level < 1) {
     throw new Error("O nível do jogador não pode ser menor do que 1!");
   }
-  if (updatedPlayer.power < 1) {
+  if (updatedPlayer.power < 0) {
     throw new Error("O nível do jogador não pode ser menor do que 1!");
   }
 
