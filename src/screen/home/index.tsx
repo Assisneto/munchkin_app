@@ -17,6 +17,7 @@ import { useSocket } from "../../hooks/useSocket";
 import { Icons } from "./components/header/styles";
 import { PartyModal } from "./components/partyModal";
 import { SocketContext, SocketType } from "../../socket/socket";
+import { executeBySocketType } from "../../utils/typeSocketHandle";
 
 export const Home = () => {
   const { toggleTheme, theme } = useContext(ThemeContext);
@@ -57,13 +58,13 @@ export const Home = () => {
   };
 
   useEffect(() => {
-    if (socketState === SocketType.CLIENT) {
+    executeBySocketType(socketState, SocketType.CLIENT, () => {
       if (channel) {
         channel.on("create_player", (player) => {
           handleSavePlayer(player);
         });
       }
-    }
+    });
   }, [channel]);
 
   useFocusEffect(

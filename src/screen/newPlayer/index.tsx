@@ -13,6 +13,7 @@ import {
 import { savePlayer } from "../../storage/player/player";
 import { useSocket } from "../../hooks/useSocket";
 import { SocketContext, SocketType } from "../../socket/socket";
+import { executeBySocketType } from "../../utils/typeSocketHandle";
 
 const MALE = "male";
 const FEMALE = "female";
@@ -24,21 +25,23 @@ export const NewPlayer = () => {
   const [showError, setShowError] = useState<string>("");
   const { channel } = useSocket("room:lobby");
   const newPlayer = async () => {
-    await savePlayer({
+    const playerData = {
       gender,
       name,
       level: 1,
       power: 0,
-    });
-    if (channel) {
-      if (socketState === SocketType.HOST) {
-        channel.push("new_player", {
-          gender,
-          name,
-          level: 1,
-          power: 0,
+    };
+    try {
+      await savePlayer(playerData);
+
+      if (channel) {
+        executeBySocketType(socketState, SocketType.HOST, () => {
+          channel.push("new_player", playerData);
         });
       }
+    } catch (error) {
+      console.error("Error saving new player:", error);
+      setShowError("Ocorreu um erro ao salvar o novo jogador.");
     }
   };
 
