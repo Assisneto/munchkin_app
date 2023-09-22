@@ -1,5 +1,5 @@
-import { useCallback, useContext, useState } from "react";
-import { Circle, CircleTitle, Container } from "./styles";
+import { useCallback, useContext, useEffect, useState } from "react";
+import { Circle, Container, Title } from "./styles";
 
 import { FlatList } from "react-native";
 import { ThemeContext, ThemeType } from "../../theme/theme";
@@ -11,15 +11,25 @@ import {
   deletePlayerByName,
   getPlayers,
   playerType,
+  savePlayer,
 } from "../../storage/player/player";
+import { useSocket } from "../../hooks/useSocket";
+import { Icons } from "./components/header/styles";
+import { PartyModal } from "./components/partyModal";
+import { SocketContext, SocketType } from "../../socket/socket";
 
 export const Home = () => {
   const { toggleTheme, theme } = useContext(ThemeContext);
+  const { socketState } = useContext(SocketContext);
   const navigation = useNavigation();
+  const { channel } = useSocket("room:lobby");
   const [players, setPlayers] = useState<playerType[] | []>();
+  const [isModalVisible, setModalVisible] = useState(false);
+
   const handleNewPlayer = () => {
     navigation.navigate("newPlayer");
   };
+
   const fetchPlayer = async () => {
     const players = await getPlayers();
     return setPlayers(players);
@@ -30,6 +40,31 @@ export const Home = () => {
     const players = await getPlayers();
     return setPlayers(players);
   };
+
+  const handleSavePlayer = async (player: playerType) => {
+    try {
+      try {
+        await savePlayer(player);
+      } catch {}
+      await fetchPlayer();
+    } catch (error) {
+      console.error("Error saving player:", error);
+    }
+  };
+
+  const handlerModal = () => {
+    setModalVisible(!isModalVisible);
+  };
+
+  useEffect(() => {
+    if (socketState === SocketType.CLIENT) {
+      if (channel) {
+        channel.on("create_player", (player) => {
+          handleSavePlayer(player);
+        });
+      }
+    }
+  }, [channel]);
 
   useFocusEffect(
     useCallback(() => {
@@ -57,11 +92,18 @@ export const Home = () => {
           contentContainerStyle={{ paddingBottom: 100 }}
           ListEmptyComponent={<></>}
         />
-        <Circle onPress={handleNewPlayer}>
-          <CircleTitle>+</CircleTitle>
+        <Circle position="right" onPress={handleNewPlayer}>
+          <Icons name="plus-thick" size={26} />
         </Circle>
+        <Circle position="left" onPress={handlerModal}>
+          <Icons name="party-popper" size={26} />
+        </Circle>
+        {isModalVisible && (
+          <PartyModal isModalVisible hideModal={handlerModal} />
+        )}
+        <Title>{socketState}</Title>
         {/* <Switch value={isDarkMode} onValueChange={toggleTheme} />
-      <Title>Munchkin</Title> */}
+         */}
       </Container>
     </>
   );

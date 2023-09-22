@@ -1,4 +1,8 @@
 import styled from "styled-components/native";
+import { TouchableOpacityProps } from "react-native";
+interface CircleProps extends TouchableOpacityProps {
+  position?: "left" | "right";
+}
 
 export const Container = styled.View`
   flex: 1;
@@ -11,8 +15,11 @@ export const Title = styled.Text`
   font-weight: bold;
   color: ${(props) => props.theme.colors.text};
   padding-bottom: 10px;
+  position: absolute;
+  bottom: 1px;
+  left: 50%;
 `;
-export const Circle = styled.TouchableOpacity`
+export const Circle = styled.TouchableOpacity<CircleProps>`
   width: 60px;
   height: 60px;
   border-radius: 30px;
@@ -21,12 +28,6 @@ export const Circle = styled.TouchableOpacity`
   justify-content: center;
   position: absolute;
   bottom: 0;
-  right: 0;
-  margin: 0 15px 15px 0px;
-  /* transform: rotate(90deg); */
-`;
-
-export const CircleTitle = styled.Text`
-  font-size: 20px;
-  position: absolute;
+  ${(props) => (props.position === "right" ? "right: 0;" : "left: 0;")}
+  margin: 20px;
 `;
