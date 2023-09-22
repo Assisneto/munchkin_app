@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Header } from "./component/header";
 import {
   Container,
@@ -11,6 +11,8 @@ import {
   ErrorText,
 } from "./styles";
 import { savePlayer } from "../../storage/player/player";
+import { useSocket } from "../../hooks/useSocket";
+import { SocketContext, SocketType } from "../../socket/socket";
 
 const MALE = "male";
 const FEMALE = "female";
@@ -18,8 +20,9 @@ const FEMALE = "female";
 export const NewPlayer = () => {
   const [gender, setGender] = useState<string>(MALE);
   const [name, setName] = useState<string>("");
+  const { socketState } = useContext(SocketContext);
   const [showError, setShowError] = useState<string>("");
-
+  const { channel } = useSocket("room:lobby");
   const newPlayer = async () => {
     await savePlayer({
       gender,
@@ -27,6 +30,16 @@ export const NewPlayer = () => {
       level: 1,
       power: 0,
     });
+    if (channel) {
+      if (socketState === SocketType.HOST) {
+        channel.push("new_player", {
+          gender,
+          name,
+          level: 1,
+          power: 0,
+        });
+      }
+    }
   };
 
   return (
