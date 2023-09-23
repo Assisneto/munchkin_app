@@ -6,7 +6,7 @@ import { Gender } from "../../../../components/gender";
 import { editPlayer, playerType } from "../../../../storage/player/player";
 import { StatAdjuster } from "./statAdjuster";
 import { useSocket } from "../../../../hooks/useSocket";
-import { executeBySocketType } from "../../../../utils/typeSocketHandle";
+import { executeBySocketType } from "../../../../utils/executeBySocketType";
 import { SocketContext, SocketType } from "../../../../socket/socket";
 
 type Props = {

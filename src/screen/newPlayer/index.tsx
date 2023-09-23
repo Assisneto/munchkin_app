@@ -13,7 +13,7 @@ import {
 import { savePlayer } from "../../storage/player/player";
 import { useSocket } from "../../hooks/useSocket";
 import { SocketContext, SocketType } from "../../socket/socket";
-import { executeBySocketType } from "../../utils/typeSocketHandle";
+import { executeBySocketType } from "../../utils/executeBySocketType";
 
 const MALE = "male";
 const FEMALE = "female";
