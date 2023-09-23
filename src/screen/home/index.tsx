@@ -39,15 +39,32 @@ export const Home = () => {
 
   const deletePlayer = async (name: string) => {
     await deletePlayerByName(name);
-    const players = await getPlayers();
-    return setPlayers(players);
+    executeBySocketType(socketState, SocketType.HOST, async () => {
+      await channel?.push("delete_player", { name });
+    });
+    return fetchPlayer();
+  };
+
+  const onCreatePlayer = async (player: playerType) => {
+    await handleSavePlayer(player);
+  };
+
+  const onEditedPlayer = async (editedPlayer: playerType) => {
+    await editPlayer(editedPlayer);
+    await fetchPlayer();
+  };
+
+  const onDeletedPlayer = async ({
+    name: deletedPlayerName,
+  }: {
+    name: string;
+  }) => {
+    await deletePlayer(deletedPlayerName);
   };
 
   const handleSavePlayer = async (player: playerType) => {
     try {
-      try {
-        await savePlayer(player);
-      } catch {}
+      await savePlayer(player);
       await fetchPlayer();
     } catch (error) {
       console.error("Error saving player:", error);
@@ -60,17 +77,16 @@ export const Home = () => {
 
   useEffect(() => {
     executeBySocketType(socketState, SocketType.CLIENT, () => {
-      if (channel) {
-        channel.on("create_player", (player) => {
-          handleSavePlayer(player);
-        });
-        channel.on("edited_player", async (editedPlayer) => {
-          await editPlayer(editedPlayer);
-          await fetchPlayer();
-        });
-      }
+      channel?.on("create_player", onCreatePlayer);
+      channel?.on("edited_player", onEditedPlayer);
+      channel?.on("deleted_player", onDeletedPlayer);
     });
-  }, [channel]);
+    return () => {
+      channel?.off("create_player");
+      channel?.off("edited_player");
+      channel?.off("deleted_player");
+    };
+  }, [channel, socketState]);
 
   useFocusEffect(
     useCallback(() => {
