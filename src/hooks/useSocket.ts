@@ -9,10 +9,7 @@ export const useSocket = (channelName: string): UseSocketReturn => {
   const [channel, setChannel] = useState<Channel | null>(null);
 
   useEffect(() => {
-    const socket = new Socket(
-      "ws://810a-189-70-64-212.ngrok-free.app/socket",
-      {}
-    );
+    const socket = new Socket(process.env.REACT_APP_SOCKET_URL || "", {});
 
     socket.onOpen(() => console.log("Connected."));
     socket.onError((event) => console.log("Cannot connect.", event));
