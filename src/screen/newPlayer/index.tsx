@@ -14,6 +14,7 @@ import { savePlayer } from "../../storage/player/player";
 import { useSocket } from "../../hooks/useSocket";
 import { SocketContext, SocketType } from "../../socket/socket";
 import { executeBySocketType } from "../../utils/executeBySocketType";
+import { useNavigation } from "@react-navigation/native";
 
 const MALE = "male";
 const FEMALE = "female";
@@ -24,6 +25,12 @@ export const NewPlayer = () => {
   const { socketState } = useContext(SocketContext);
   const [showError, setShowError] = useState<string>("");
   const { channel } = useSocket("room:lobby");
+  const navigation = useNavigation();
+
+  const backToHome = () => {
+    navigation.goBack();
+  };
+
   const newPlayer = async () => {
     const playerData = {
       gender,
@@ -31,17 +38,21 @@ export const NewPlayer = () => {
       level: 1,
       power: 0,
     };
+
     try {
       await savePlayer(playerData);
-
+      backToHome();
       if (channel) {
         executeBySocketType(socketState, SocketType.HOST, () => {
           channel.push("new_player", playerData);
         });
       }
     } catch (error) {
-      console.error("Error saving new player:", error);
-      setShowError("Ocorreu um erro ao salvar o novo jogador.");
+      if (error instanceof Error) {
+        setShowError(error.message);
+      } else {
+        setShowError("Ocorreu um erro ao salvar o novo jogador.");
+      }
     }
   };
 
