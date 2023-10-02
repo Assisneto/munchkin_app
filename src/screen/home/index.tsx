@@ -1,7 +1,7 @@
 import { useCallback, useContext, useEffect, useState } from "react";
 import { Circle, Container, Title } from "./styles";
 
-import { FlatList } from "react-native";
+import { FlatList, Platform } from "react-native";
 import { ThemeContext, ThemeType } from "../../theme/theme";
 
 import { Header } from "./components/header";
@@ -13,7 +13,7 @@ import {
   getPlayers,
   playerType,
   savePlayer,
-} from "../../storage/player/player";
+} from "../../storage/player";
 import { useSocket } from "../../hooks/useSocket";
 import { Icons } from "./components/header/styles";
 import { PartyModal } from "./components/partyModal";

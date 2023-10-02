@@ -10,7 +10,7 @@ import {
   RadioButton,
   ErrorText,
 } from "./styles";
-import { savePlayer } from "../../storage/player/player";
+import { savePlayer } from "../../storage/player";
 import { useSocket } from "../../hooks/useSocket";
 import { SocketContext, SocketType } from "../../socket/socket";
 import { executeBySocketType } from "../../utils/executeBySocketType";
