@@ -12,9 +12,10 @@ import {
 } from "./styles";
 import { savePlayer } from "../../storage/player";
 import { useSocket } from "../../hooks/useSocket";
-import { SocketContext, SocketType } from "../../socket/socket";
+import { SocketContext } from "../../socket/socket";
 import { executeBySocketType } from "../../utils/executeBySocketType";
 import { useNavigation } from "@react-navigation/native";
+import { SocketType } from "../../storage/socket";
 
 const MALE = "male";
 const FEMALE = "female";

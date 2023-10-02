@@ -2,7 +2,7 @@ import React from "react";
 
 import { Icons } from "./styles";
 import { StyleProp, TextStyle, ViewStyle } from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+
 type Props = {
   gender: string;
   style?: StyleProp<ViewStyle | TextStyle>;

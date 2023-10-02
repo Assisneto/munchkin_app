@@ -17,8 +17,9 @@ import {
 import { useSocket } from "../../hooks/useSocket";
 import { Icons } from "./components/header/styles";
 import { PartyModal } from "./components/partyModal";
-import { SocketContext, SocketType } from "../../socket/socket";
+import { SocketContext } from "../../socket/socket";
 import { executeBySocketType } from "../../utils/executeBySocketType";
+import { SocketType } from "../../storage/socket";
 
 export const Home = () => {
   const { toggleTheme, theme } = useContext(ThemeContext);

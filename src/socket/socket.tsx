@@ -1,9 +1,5 @@
-import React, { createContext, useState } from "react";
-
-export enum SocketType {
-  HOST = "host",
-  CLIENT = "client",
-}
+import React, { createContext, useState, useEffect } from "react";
+import { saveSocketType, getSocketType, SocketType } from "../storage/socket";
 
 export const SocketContext = createContext({
   socketState: SocketType.CLIENT,
@@ -15,7 +11,17 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [socketState, setSocketState] = useState(SocketType.CLIENT);
 
-  const toggleSocketState = (value: SocketType) => {
+  useEffect(() => {
+    (async () => {
+      const storedSocketType = await getSocketType();
+      if (storedSocketType) {
+        setSocketState(storedSocketType);
+      }
+    })();
+  }, []);
+
+  const toggleSocketState = async (value: SocketType) => {
+    await saveSocketType(value);
     setSocketState(value);
   };
 
