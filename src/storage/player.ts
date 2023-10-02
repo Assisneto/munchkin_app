@@ -7,30 +7,30 @@ type playerType = {
   level: number;
 };
 
-async function validatePlayers(newPlayers: playerType[]) {
-  const players = await getPlayers();
+async function validatePlayerName(playerName: string) {
+  if (!playerName.trim()) {
+    throw new Error("O nome do jogador não pode ser vazio!");
+  }
+}
 
-  for (let newPlayer of newPlayers) {
-    if (!newPlayer.name.trim()) {
-      throw new Error("O nome do jogador não pode ser vazio!");
-    }
-
-    if (
-      players.some((existingPlayer) => existingPlayer.name === newPlayer.name)
-    ) {
-      throw new Error(`Um jogador com o nome ${newPlayer.name} já existe!`);
-    }
+async function isPlayerDuplicate(
+  newPlayer: playerType,
+  existingPlayers: playerType[]
+) {
+  if (existingPlayers.some((player) => player.name === newPlayer.name)) {
+    throw new Error(`Um jogador com o nome ${newPlayer.name} já existe!`);
   }
 }
 
 async function savePlayer(player: playerType) {
-  await validatePlayers([player]);
-  await saveToLocalStorage("player", [...(await getPlayers()), player]);
+  const players = await getPlayers();
+  await validatePlayerName(player.name);
+  await isPlayerDuplicate(player, players); // We still want to validate duplicates for a single player
+  await saveToLocalStorage("player", [...players, player]);
 }
 
 async function savePlayers(newPlayers: playerType[]) {
-  await validatePlayers(newPlayers);
-  await saveToLocalStorage("player", [...(await getPlayers()), ...newPlayers]);
+  await saveToLocalStorage("player", newPlayers);
 }
 
 async function getPlayers(): Promise<playerType[]> {

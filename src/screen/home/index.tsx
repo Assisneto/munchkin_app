@@ -1,7 +1,7 @@
 import { useCallback, useContext, useEffect, useState } from "react";
 import { Circle, Container, Title } from "./styles";
 
-import { FlatList, Platform } from "react-native";
+import { FlatList } from "react-native";
 import { ThemeContext, ThemeType } from "../../theme/theme";
 
 import { Header } from "./components/header";
@@ -13,6 +13,7 @@ import {
   getPlayers,
   playerType,
   savePlayer,
+  savePlayers,
 } from "../../storage/player";
 import { useSocket } from "../../hooks/useSocket";
 import { Icons } from "./components/header/styles";
@@ -49,6 +50,14 @@ export const Home = () => {
   const onCreatePlayer = async (player: playerType) => {
     await handleSavePlayer(player);
   };
+  const onCreatePlayers = async ({ players }: { players: playerType[] }) => {
+    await handleSavePlayers(players);
+  };
+
+  const onSyncPlayers = async () => {
+    const players = await getPlayers();
+    await channel?.push("syncing", { players });
+  };
 
   const onEditedPlayer = async (editedPlayer: playerType) => {
     await editPlayer(editedPlayer);
@@ -72,6 +81,15 @@ export const Home = () => {
     }
   };
 
+  const handleSavePlayers = async (players: playerType[]) => {
+    try {
+      await savePlayers(players);
+      await fetchPlayer();
+    } catch (error) {
+      console.error("Error saving player:", error);
+    }
+  };
+
   const handlerModal = () => {
     setModalVisible(!isModalVisible);
   };
@@ -81,11 +99,17 @@ export const Home = () => {
       channel?.on("create_player", onCreatePlayer);
       channel?.on("edited_player", onEditedPlayer);
       channel?.on("deleted_player", onDeletedPlayer);
+      channel?.on("synchronize", onCreatePlayers);
     });
+    executeBySocketType(socketState, SocketType.HOST, () => {
+      channel?.on("sync", onSyncPlayers);
+    });
+
     return () => {
       channel?.off("create_player");
       channel?.off("edited_player");
       channel?.off("deleted_player");
+      channel?.off("synchronize");
     };
   }, [channel, socketState]);
 
@@ -94,6 +118,12 @@ export const Home = () => {
       fetchPlayer();
     }, [])
   );
+
+  useEffect(() => {
+    executeBySocketType(socketState, SocketType.CLIENT, async () => {
+      await channel?.push("request_sync", {});
+    });
+  }, [channel, socketState]);
 
   return (
     <>
