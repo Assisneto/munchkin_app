@@ -4,7 +4,7 @@ import {
   loadFromLocalStorage,
 } from "../localStorage/localStorage";
 
-jest.mock("./localStorage/localStorage");
+jest.mock("../localStorage/localStorage");
 
 describe("SocketType utility functions", () => {
   afterEach(() => {

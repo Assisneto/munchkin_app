@@ -14,7 +14,7 @@ import {
   playerType,
   savePlayer,
   savePlayers,
-} from "../../storage/player";
+} from "../../storage/player/player";
 import { useSocket } from "../../hooks/useSocket";
 import { Icons } from "./components/header/styles";
 import { PartyModal } from "./components/partyModal";

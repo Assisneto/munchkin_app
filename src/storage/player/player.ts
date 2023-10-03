@@ -1,7 +1,7 @@
 import {
   saveToLocalStorage,
   loadFromLocalStorage,
-} from "./localStorage/localStorage";
+} from "../localStorage/localStorage";
 
 type playerType = {
   name: string;
