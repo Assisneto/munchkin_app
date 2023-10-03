@@ -1,5 +1,5 @@
 import { executeBySocketType } from "./executeBySocketType";
-import { SocketType } from "../storage/socket/socket";
+import { SocketType } from "../storage/socket";
 
 jest.mock("@react-native-async-storage/async-storage");
 

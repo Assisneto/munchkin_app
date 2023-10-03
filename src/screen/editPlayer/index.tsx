@@ -6,7 +6,7 @@ import {
   deletePlayerByName,
   getPlayers,
   playerType,
-} from "../../storage/player/player";
+} from "../../storage/player";
 import { Player } from "../../components/player";
 import { FlatList } from "react-native-gesture-handler";
 import { useFocusEffect } from "@react-navigation/native";

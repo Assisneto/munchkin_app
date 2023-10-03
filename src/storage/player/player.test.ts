@@ -4,14 +4,11 @@ import {
   deletePlayerByName,
   editPlayer,
   savePlayers,
-} from "./player";
+} from ".";
 
-import {
-  saveToLocalStorage,
-  loadFromLocalStorage,
-} from "../localStorage/localStorage";
+import { saveToLocalStorage, loadFromLocalStorage } from "../localStorage";
 
-jest.mock("../localStorage/localStorage");
+jest.mock("../localStorage");
 
 describe("Player utility functions", () => {
   afterEach(() => {

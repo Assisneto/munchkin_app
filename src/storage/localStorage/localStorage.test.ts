@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { saveToLocalStorage, loadFromLocalStorage } from "./localStorage";
+import { saveToLocalStorage, loadFromLocalStorage } from ".";
 
 describe("AsyncStorage utility functions", () => {
   afterEach(() => {

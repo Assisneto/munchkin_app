@@ -1,7 +1,4 @@
-import {
-  saveToLocalStorage,
-  loadFromLocalStorage,
-} from "../localStorage/localStorage";
+import { saveToLocalStorage, loadFromLocalStorage } from "../localStorage";
 
 export enum SocketType {
   HOST = "host",

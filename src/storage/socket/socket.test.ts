@@ -1,10 +1,7 @@
-import { saveSocketType, getSocketType, SocketType } from "./socket";
-import {
-  saveToLocalStorage,
-  loadFromLocalStorage,
-} from "../localStorage/localStorage";
+import { saveSocketType, getSocketType, SocketType } from ".";
+import { saveToLocalStorage, loadFromLocalStorage } from "../localStorage";
 
-jest.mock("../localStorage/localStorage");
+jest.mock("../localStorage");
 
 describe("SocketType utility functions", () => {
   afterEach(() => {

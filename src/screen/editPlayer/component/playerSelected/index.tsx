@@ -3,12 +3,12 @@ import React, { useContext, useEffect, useState } from "react";
 import { Container, Name, Title, Number, RowContainer } from "./styles";
 import { Gender } from "../../../../components/gender";
 
-import { editPlayer, playerType } from "../../../../storage/player/player";
+import { editPlayer, playerType } from "../../../../storage/player";
 import { StatAdjuster } from "./statAdjuster";
 import { useSocket } from "../../../../hooks/useSocket";
 import { executeBySocketType } from "../../../../utils/executeBySocketType";
 import { SocketContext } from "../../../../socket/socket";
-import { SocketType } from "../../../../storage/socket/socket";
+import { SocketType } from "../../../../storage/socket";
 
 type Props = {
   initialPlayer: playerType;
