@@ -1,4 +1,7 @@
-import { saveToLocalStorage, loadFromLocalStorage } from "./localStorage";
+import {
+  saveToLocalStorage,
+  loadFromLocalStorage,
+} from "./localStorage/localStorage";
 
 type playerType = {
   name: string;
@@ -25,7 +28,7 @@ async function isPlayerDuplicate(
 async function savePlayer(player: playerType) {
   const players = await getPlayers();
   await validatePlayerName(player.name);
-  await isPlayerDuplicate(player, players); // We still want to validate duplicates for a single player
+  await isPlayerDuplicate(player, players);
   await saveToLocalStorage("player", [...players, player]);
 }
 

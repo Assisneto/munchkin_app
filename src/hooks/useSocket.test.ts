@@ -7,7 +7,7 @@ jest.mock("phoenix");
 describe("useSocket hook", () => {
   const socketUrl = "socketUrl";
   beforeEach(() => {
-    process.env.REACT_APP_SOCKET_URL = socketUrl;
+    process.env.EXPO_PUBLIC_SOCKET_URL = socketUrl;
   });
 
   afterEach(() => {

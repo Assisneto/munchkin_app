@@ -1,5 +1,7 @@
 import { executeBySocketType } from "./executeBySocketType";
-import { SocketType } from "../socket/socket";
+import { SocketType } from "../storage/socket";
+
+jest.mock("@react-native-async-storage/async-storage");
 
 describe("executeBySocketType function tests", () => {
   const mockFn = jest.fn();
