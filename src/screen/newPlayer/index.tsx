@@ -15,7 +15,7 @@ import { useSocket } from "../../hooks/useSocket";
 import { SocketContext } from "../../socket/socket";
 import { executeBySocketType } from "../../utils/executeBySocketType";
 import { useNavigation } from "@react-navigation/native";
-import { SocketType } from "../../storage/socket";
+import { SocketType } from "../../storage/socket/socket";
 
 const MALE = "male";
 const FEMALE = "female";

@@ -8,7 +8,7 @@ import { StatAdjuster } from "./statAdjuster";
 import { useSocket } from "../../../../hooks/useSocket";
 import { executeBySocketType } from "../../../../utils/executeBySocketType";
 import { SocketContext } from "../../../../socket/socket";
-import { SocketType } from "../../../../storage/socket";
+import { SocketType } from "../../../../storage/socket/socket";
 
 type Props = {
   initialPlayer: playerType;

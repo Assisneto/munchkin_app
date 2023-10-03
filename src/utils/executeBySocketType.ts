@@ -1,4 +1,4 @@
-import { SocketType } from "../storage/socket";
+import { SocketType } from "../storage/socket/socket";
 
 type ExecuteFunction = () => void;
 

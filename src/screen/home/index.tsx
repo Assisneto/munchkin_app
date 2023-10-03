@@ -20,7 +20,7 @@ import { Icons } from "./components/header/styles";
 import { PartyModal } from "./components/partyModal";
 import { SocketContext } from "../../socket/socket";
 import { executeBySocketType } from "../../utils/executeBySocketType";
-import { SocketType } from "../../storage/socket";
+import { SocketType } from "../../storage/socket/socket";
 
 export const Home = () => {
   const { toggleTheme, theme } = useContext(ThemeContext);

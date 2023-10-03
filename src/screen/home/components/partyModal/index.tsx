@@ -2,7 +2,7 @@ import { Modal, Button, TouchableWithoutFeedback } from "react-native";
 import { ModalBackground, ModalContainer, ModalText } from "./styles";
 import { SocketContext } from "../../../../socket/socket";
 import { useContext } from "react";
-import { SocketType } from "../../../../storage/socket";
+import { SocketType } from "../../../../storage/socket/socket";
 
 interface PartyModalProps {
   isModalVisible: boolean;

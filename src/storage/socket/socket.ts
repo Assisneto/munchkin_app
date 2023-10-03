@@ -1,7 +1,7 @@
 import {
   saveToLocalStorage,
   loadFromLocalStorage,
-} from "./localStorage/localStorage";
+} from "../localStorage/localStorage";
 
 export enum SocketType {
   HOST = "host",

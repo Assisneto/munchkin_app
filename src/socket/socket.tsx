@@ -1,5 +1,9 @@
 import React, { createContext, useState, useEffect } from "react";
-import { saveSocketType, getSocketType, SocketType } from "../storage/socket";
+import {
+  saveSocketType,
+  getSocketType,
+  SocketType,
+} from "../storage/socket/socket";
 
 export const SocketContext = createContext({
   socketState: SocketType.CLIENT,
