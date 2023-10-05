@@ -55,10 +55,10 @@ export const Player = ({ gender, level, name, power, deletePlayer }: Props) => {
         </RowContainer>
         <RowContainer onPress={handleEditPlayer}>
           <Point>{level}</Point>
-          <Icons name="chevron-up" size={28} />
+          <Icons name="chevron-up" size={28} testID="level-icon" />
           <Wrapper>
             <Point>{power}</Point>
-            <Icons name="sword" size={28} />
+            <Icons name="sword" size={28} testID="power-icon" />
           </Wrapper>
         </RowContainer>
       </Container>
