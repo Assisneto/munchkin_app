@@ -11,7 +11,7 @@ interface PartyModalProps {
 
 export const PartyModal: React.FC<PartyModalProps> = ({
   isModalVisible,
-  hideModal,
+  hideModal
 }) => {
   const { setSocketState } = useContext(SocketContext);
 

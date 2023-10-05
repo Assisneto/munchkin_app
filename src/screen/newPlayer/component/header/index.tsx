@@ -6,7 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 
 export const Header = ({
   savePlayer,
-  showError,
+  showError
 }: {
   savePlayer: () => Promise<void>;
   showError: (error: string) => void;

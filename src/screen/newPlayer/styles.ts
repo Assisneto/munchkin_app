@@ -12,7 +12,7 @@ export const Body = styled.View`
 `;
 
 export const Name = styled.TextInput.attrs((props) => ({
-  placeholderTextColor: `${props.theme.colors.headerText}`,
+  placeholderTextColor: `${props.theme.colors.headerText}`
 }))`
   border-width: 1px;
   border-color: ${(props) => props.theme.colors.header};
@@ -42,7 +42,7 @@ export const GenderIcon = styled(Gender)`
 
 export const RadioButton = styled(RadioButtonPaper).attrs((props) => ({
   color: `${props.theme.colors.header}`,
-  uncheckedColor: `${props.theme.colors.headerText}`,
+  uncheckedColor: `${props.theme.colors.headerText}`
 }))``;
 
 export const ErrorText = styled.Text`

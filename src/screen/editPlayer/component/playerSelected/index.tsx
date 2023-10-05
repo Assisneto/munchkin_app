@@ -27,7 +27,7 @@ export const PlayerSelected = ({ initialPlayer }: Props) => {
   const handlerEdit = async (key: PointKey, amount: number) => {
     const updatedPlayer = {
       ...player,
-      [key]: player[key] + amount,
+      [key]: player[key] + amount
     };
     try {
       await editPlayer(updatedPlayer);

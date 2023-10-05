@@ -3,11 +3,11 @@ import { saveSocketType, getSocketType, SocketType } from "../storage/socket";
 
 export const SocketContext = createContext({
   socketState: SocketType.CLIENT,
-  setSocketState: (value: SocketType) => {},
+  setSocketState: (value: SocketType) => {}
 });
 
 export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
+  children
 }) => {
   const [socketState, setSocketState] = useState(SocketType.CLIENT);
 

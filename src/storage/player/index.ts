@@ -68,5 +68,5 @@ export {
   deletePlayerByName,
   editPlayer,
   savePlayers,
-  playerType,
+  playerType
 };

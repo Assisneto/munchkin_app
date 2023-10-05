@@ -4,7 +4,7 @@ import {
   ColumnContainer,
   SubTitle,
   Icons,
-  IconContainer,
+  IconContainer
 } from "./styles";
 type PointKey = "level" | "power";
 
@@ -21,7 +21,7 @@ export const StatAdjuster = ({
   title,
   value,
   adjustValue,
-  keyName,
+  keyName
 }: StatAdjusterProps) => (
   <ColumnContainer>
     <SubTitle>{title}</SubTitle>

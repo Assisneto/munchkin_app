@@ -11,7 +11,7 @@ import {
   RowContainer,
   Wrapper,
   DeleteContainer,
-  DeleteText,
+  DeleteText
 } from "./styles";
 import { useNavigation } from "@react-navigation/native";
 

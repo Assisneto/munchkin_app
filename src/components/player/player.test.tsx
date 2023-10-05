@@ -5,12 +5,12 @@ import { ThemeProvider } from "styled-components/native";
 import { themes } from "./../../theme/theme";
 
 const mockNavigation = {
-  navigate: jest.fn(),
+  navigate: jest.fn()
 };
 
 jest.mock("@react-navigation/native", () => {
   return {
-    useNavigation: () => mockNavigation,
+    useNavigation: () => mockNavigation
   };
 });
 
@@ -21,7 +21,7 @@ describe("<Player />", () => {
     gender: "male",
     power: 5,
     level: 10,
-    deletePlayer: mockDeletePlayer,
+    deletePlayer: mockDeletePlayer
   };
 
   beforeEach(() => {
@@ -59,7 +59,7 @@ describe("<Player />", () => {
     const playerComponent = getByText("John");
     fireEvent.press(playerComponent);
     expect(mockNavigation.navigate).toHaveBeenCalledWith("editPlayer", {
-      name: "John",
+      name: "John"
     });
   });
 
@@ -84,7 +84,7 @@ describe("<Player />", () => {
   it("displays the correct gender for female", () => {
     const femaleProps = {
       ...props,
-      gender: "female",
+      gender: "female"
     };
     const { getByTestId } = render(
       <ThemeProvider theme={themes.dark}>

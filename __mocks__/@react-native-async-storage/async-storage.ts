@@ -8,5 +8,5 @@ export default {
   multiGet: jest.fn(),
   multiSet: jest.fn(),
   multiRemove: jest.fn(),
-  multiMerge: jest.fn(),
+  multiMerge: jest.fn()
 };

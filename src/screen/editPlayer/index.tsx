@@ -5,7 +5,7 @@ import { Header } from "./component/header";
 import {
   deletePlayerByName,
   getPlayers,
-  playerType,
+  playerType
 } from "../../storage/player";
 import { Player } from "../../components/player";
 import { FlatList } from "react-native-gesture-handler";
@@ -28,7 +28,7 @@ const filterPlayersByName = (players: playerType[], name: string) =>
     },
     {
       filteredPlayers: [] as playerType[],
-      remainingPlayers: [] as playerType[],
+      remainingPlayers: [] as playerType[]
     }
   );
 
@@ -38,7 +38,7 @@ export const EditPlayer = () => {
     name: "",
     gender: "",
     level: 1,
-    power: 0,
+    power: 0
   });
 
   const route = useRoute();

@@ -2,7 +2,7 @@ import { saveToLocalStorage, loadFromLocalStorage } from "../localStorage";
 
 export enum SocketType {
   HOST = "host",
-  CLIENT = "client",
+  CLIENT = "client"
 }
 
 async function saveSocketType(type: SocketType) {

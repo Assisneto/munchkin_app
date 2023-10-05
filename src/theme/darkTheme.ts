@@ -6,6 +6,6 @@ export const darkTheme: DefaultTheme = {
     text: "#fff",
     headerText: "#fff",
     header: "#696969",
-    iconColor: "#fff",
-  },
+    iconColor: "#fff"
+  }
 };

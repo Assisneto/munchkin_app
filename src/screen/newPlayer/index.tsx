@@ -8,7 +8,7 @@ import {
   BodyText,
   GenderContainer,
   RadioButton,
-  ErrorText,
+  ErrorText
 } from "./styles";
 import { savePlayer } from "../../storage/player";
 import { useSocket } from "../../hooks/useSocket";
@@ -37,7 +37,7 @@ export const NewPlayer = () => {
       gender,
       name,
       level: 1,
-      power: 0,
+      power: 0
     };
 
     try {

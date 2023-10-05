@@ -5,21 +5,21 @@ import { lightTheme } from "./lightTheme";
 
 export enum ThemeType {
   light = `light`,
-  dark = "dark",
+  dark = "dark"
 }
 
 export const themes = {
   dark: darkTheme,
-  light: lightTheme,
+  light: lightTheme
 };
 
 export const ThemeContext = createContext({
   theme: ThemeType.light,
-  toggleTheme: () => {},
+  toggleTheme: () => {}
 });
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
+  children
 }) => {
   const [theme, setTheme] = useState(ThemeType.dark);
 

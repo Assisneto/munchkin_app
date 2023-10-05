@@ -13,7 +13,7 @@ import {
   getPlayers,
   playerType,
   savePlayer,
-  savePlayers,
+  savePlayers
 } from "../../storage/player";
 import { useSocket } from "../../hooks/useSocket";
 import { Icons } from "./components/header/styles";
@@ -65,7 +65,7 @@ export const Home = () => {
   };
 
   const onDeletedPlayer = async ({
-    name: deletedPlayerName,
+    name: deletedPlayerName
   }: {
     name: string;
   }) => {

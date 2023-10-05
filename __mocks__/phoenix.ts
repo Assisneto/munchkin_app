@@ -3,7 +3,7 @@ const mockReceive = jest.fn();
 const mockChannel: PhoenixChannel = {
   join: jest.fn(() => mockChannel),
   leave: jest.fn(),
-  receive: jest.fn(() => mockChannel),
+  receive: jest.fn(() => mockChannel)
   // ... add other methods/properties if needed
 } as any;
 
@@ -12,7 +12,7 @@ const mockSocket: PhoenixSocket = {
   onOpen: jest.fn(),
   onError: jest.fn(),
   onClose: jest.fn(),
-  connect: jest.fn(),
+  connect: jest.fn()
   // ... add other methods/properties if needed
 } as any;
 
