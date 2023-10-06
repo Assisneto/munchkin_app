@@ -20,7 +20,7 @@ export const Header = ({ savePlayer }: { savePlayer: () => Promise<void> }) => {
           <Title>Novo Munchkin</Title>
         </AlignWrapper>
         <Options>
-          <TouchableOpacity onPress={savePlayer}>
+          <TouchableOpacity onPress={savePlayer} testID="savePlayerButton">
             <Icons name="check" testID="save-button" size={30} />
           </TouchableOpacity>
         </Options>

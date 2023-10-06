@@ -59,9 +59,10 @@ export const NewPlayer = () => {
 
   return (
     <Container>
-      <Header savePlayer={newPlayer} showError={setShowError} />
+      <Header savePlayer={newPlayer} />
       <Body>
         <Name
+          testID="nameInput"
           placeholder="Nome"
           onChangeText={(value) => {
             setName(value);
@@ -77,6 +78,7 @@ export const NewPlayer = () => {
         >
           <GenderIcon gender={MALE} size={30} />
           <RadioButton
+            testID="radio-male"
             value={MALE}
             status={gender === MALE ? "checked" : "unchecked"}
             onPress={() => {
@@ -91,6 +93,7 @@ export const NewPlayer = () => {
         >
           <GenderIcon gender={FEMALE} size={30} />
           <RadioButton
+            testID="radio-female"
             value={FEMALE}
             status={gender === FEMALE ? "checked" : "unchecked"}
             onPress={() => {

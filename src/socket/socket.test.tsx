@@ -4,10 +4,8 @@ import { SocketProvider, SocketContext } from "./socket";
 import { TouchableOpacity, Text } from "react-native";
 import * as socketStorage from "../storage/socket";
 
-// Mocking the storage functions
 jest.mock("../storage/socket");
 
-// Type the mocked functions for Jest
 const mockedGetSocketType = socketStorage.getSocketType as jest.MockedFunction<
   typeof socketStorage.getSocketType
 >;
@@ -17,7 +15,6 @@ const mockedSaveSocketType =
   >;
 
 beforeEach(() => {
-  // Set up the mocked functions with default behaviors or values
   mockedGetSocketType.mockImplementation(() =>
     Promise.resolve(socketStorage.SocketType.CLIENT)
   );
