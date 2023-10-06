@@ -6,7 +6,7 @@ import {
   Icons,
   IconContainer
 } from "./styles";
-type PointKey = "level" | "power";
+export type PointKey = "level" | "power";
 
 const ICONSIZE = 56;
 
@@ -27,10 +27,16 @@ export const StatAdjuster = ({
     <SubTitle>{title}</SubTitle>
     <SubNumber>{value}</SubNumber>
     <IconContainer>
-      <TouchableOpacity onPress={() => adjustValue(keyName, -1)}>
+      <TouchableOpacity
+        testID={`${keyName}-decrement-button`}
+        onPress={() => adjustValue(keyName, -1)}
+      >
         <Icons name="arrow-drop-down" size={ICONSIZE} />
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => adjustValue(keyName, 1)}>
+      <TouchableOpacity
+        testID={`${keyName}-increment-button`}
+        onPress={() => adjustValue(keyName, 1)}
+      >
         <Icons name="arrow-drop-up" size={ICONSIZE} />
       </TouchableOpacity>
     </IconContainer>
