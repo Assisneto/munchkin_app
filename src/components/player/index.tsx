@@ -44,7 +44,7 @@ export const Player = ({ gender, level, name, power, deletePlayer }: Props) => {
   return (
     <Swipeable renderRightActions={() => deleteComponent(deletePlayer, name)}>
       <Container onPress={handleEditPlayer}>
-        <RowContainer onPress={handleEditPlayer}>
+        <RowContainer testID="playerContainer" onPress={handleEditPlayer}>
           <Circle>
             <Letter>{firstLetter(name)}</Letter>
           </Circle>

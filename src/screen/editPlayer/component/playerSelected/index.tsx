@@ -45,7 +45,7 @@ export const PlayerSelected = ({ initialPlayer }: Props) => {
 
   return (
     <Container>
-      <Name>{player.name}</Name>
+      <Name testID="playerSelectedName">{player.name}</Name>
       <Title>Força</Title>
       <Number>{player.level + player.power}</Number>
       <Gender gender={player.gender} size={30} />

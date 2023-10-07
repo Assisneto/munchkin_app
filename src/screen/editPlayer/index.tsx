@@ -46,10 +46,12 @@ export const EditPlayer = () => {
 
   const showPlayers = async () => {
     const players = await getPlayers();
+
     const { filteredPlayers, remainingPlayers } = filterPlayersByName(
       players,
       name
     );
+
     setPlayer(remainingPlayers[0]);
     setPlayers(filteredPlayers);
   };
