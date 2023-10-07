@@ -11,9 +11,14 @@ export const Header = () => {
   };
 
   return (
-    <Container>
+    <Container testID="header-container">
       <AlignWrapper>
-        <Icons name="chevron-left" size={34} onPress={backToHome} />
+        <Icons
+          name="chevron-left"
+          size={34}
+          onPress={backToHome}
+          testID="back-icon"
+        />
       </AlignWrapper>
       <Options>
         <TouchableOpacity>
