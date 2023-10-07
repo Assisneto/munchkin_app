@@ -136,7 +136,7 @@ describe("<EditPlayer />", () => {
       mockUseFocusEffectCallback();
     });
 
-    const janePlayer = await findByTestId("playerContainer");
+    const janePlayer = await findByTestId("playerContainer-Jane");
 
     await act(async () => {
       fireEvent.press(janePlayer);

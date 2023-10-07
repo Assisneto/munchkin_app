@@ -23,7 +23,7 @@ import { executeBySocketType } from "../../utils/executeBySocketType";
 import { SocketType } from "../../storage/socket";
 
 export const Home = () => {
-  const { toggleTheme, theme } = useContext(ThemeContext);
+  // const { toggleTheme, theme } = useContext(ThemeContext);
   const { socketState } = useContext(SocketContext);
   const navigation = useNavigation();
   const { channel } = useSocket("room:lobby");
@@ -127,7 +127,7 @@ export const Home = () => {
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <Container>
         <FlatList
           data={players}

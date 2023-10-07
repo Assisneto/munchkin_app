@@ -6,7 +6,9 @@ export const mockChannel: PhoenixChannel = {
   join: jest.fn(() => mockChannel),
   leave: jest.fn(),
   receive: jest.fn(() => mockChannel),
-  push: jest.fn(() => mockChannel)
+  push: jest.fn(() => mockChannel),
+  on: jest.fn(),
+  off: jest.fn()
 } as any;
 
 const mockSocket: PhoenixSocket = {
