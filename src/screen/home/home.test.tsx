@@ -1,27 +1,22 @@
 import React, { ReactNode } from "react";
-import { render, act, fireEvent } from "@testing-library/react-native";
+import { render, act, fireEvent, waitFor } from "@testing-library/react-native";
 import { Home } from ".";
 import { ThemeProvider } from "styled-components/native";
 import { themes } from "../../theme/theme";
-import * as playerStorage from "../../storage/player";
 import { NavigationContainer } from "@react-navigation/native";
 import { SocketContext } from "../../socket/socket";
-import * as PhoenixMocks from "phoenix";
 import { SocketType } from "../../storage/socket";
+import { deletePlayerByName, getPlayers } from "../../storage/player";
+const { Socket: MockedSocket } = require("phoenix");
 
-const { Socket: MockedSocket } = PhoenixMocks;
 const mockUseFocusEffectCallback = jest.fn();
 const mockSocketInstance = new MockedSocket("");
 const mockChannelInstance = mockSocketInstance.channel("");
+const mockedDeletePlayerByName = deletePlayerByName as jest.Mock;
+const mockNavigation = { navigate: jest.fn(), goBack: jest.fn() };
 
 jest.mock("../../storage/player");
-
 jest.mock("phoenix");
-const mockNavigation = {
-  navigate: jest.fn(),
-  goBack: jest.fn()
-};
-
 jest.mock("@react-navigation/native", () => ({
   ...jest.requireActual("@react-navigation/native"),
   useRoute: jest.fn(),
@@ -31,14 +26,15 @@ jest.mock("@react-navigation/native", () => ({
   useNavigation: () => mockNavigation,
   NavigationContainer: ({ children }: { children: ReactNode }) => children
 }));
-
 jest.mock("../../hooks/useSocket", () => ({
   useSocket: () => ({ channel: mockChannelInstance })
 }));
+
 const mockSocketContextValue = {
   socketState: SocketType.HOST,
   setSocketState: jest.fn()
 };
+
 const renderWithProviders = (children: ReactNode) => {
   return render(
     <ThemeProvider theme={themes.dark}>
@@ -56,7 +52,7 @@ describe("<Home />", () => {
   ];
 
   beforeEach(() => {
-    (playerStorage.getPlayers as jest.Mock).mockResolvedValue(dummyPlayers);
+    (getPlayers as jest.Mock).mockResolvedValue(dummyPlayers);
   });
 
   it("renders correctly", () => {
@@ -93,13 +89,53 @@ describe("<Home />", () => {
     });
   });
 
-  // it("toggles the visibility of the modal", () => {
-  //   const { getByTestId, queryByTestId } = renderWithProviders(<Home />);
+  it("toggles the visibility of the modal", async () => {
+    const { getByTestId, queryByTestId, findByTestId } = renderWithProviders(
+      <Home />
+    );
 
-  //   // Assuming the button related to "handlerModal" has a testID of "toggleModalButton"
-  //   // and the modal has a testID of "partyModal"
-  //   expect(queryByTestId("partyModal")).toBeNull();
-  //   fireEvent.press(getByTestId("toggleModalButton"));
-  //   expect(getByTestId("partyModal")).toBeTruthy();
-  // });
+    expect(queryByTestId("partyModal")).toBeNull();
+
+    fireEvent.press(getByTestId("toggleModalButton"));
+
+    const partyModal = await findByTestId("partyModal");
+    expect(partyModal).toBeTruthy();
+  });
+  it("navigates to the new player screen when the 'plus' button is pressed", async () => {
+    const { getByTestId } = renderWithProviders(<Home />);
+    act(() => {
+      mockUseFocusEffectCallback();
+    });
+    await act(async () => {
+      const navigateButton = getByTestId("navigateNewPlayerButton");
+      fireEvent.press(navigateButton);
+    });
+    expect(mockNavigation.navigate).toHaveBeenCalledWith("newPlayer");
+  });
+
+  it("deletes a player when the delete action is pressed in Player component", async () => {
+    const { findByTestId, queryByText, debug } = renderWithProviders(<Home />);
+
+    act(() => {
+      mockUseFocusEffectCallback();
+    });
+
+    await act(async () => {
+      const deleteButtonInsidePlayer = await findByTestId("deleteButton-John");
+      fireEvent.press(deleteButtonInsidePlayer);
+    });
+
+    await waitFor(() => {
+      expect(mockedDeletePlayerByName).toHaveBeenCalledWith("John");
+    });
+  });
+  it("sends a request_sync event for SocketType.CLIENT", () => {
+    const mockPush = jest.fn();
+    mockChannelInstance.push = mockPush;
+    mockSocketContextValue.socketState = SocketType.CLIENT;
+
+    renderWithProviders(<Home />);
+
+    expect(mockPush).toHaveBeenCalledWith("request_sync", {});
+  });
 });

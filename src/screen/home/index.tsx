@@ -127,7 +127,7 @@ export const Home = () => {
 
   return (
     <>
-      {/* <Header /> */}
+      <Header />
       <Container>
         <FlatList
           data={players}
@@ -145,10 +145,18 @@ export const Home = () => {
           contentContainerStyle={{ paddingBottom: 100 }}
           ListEmptyComponent={<></>}
         />
-        <Circle position="right" onPress={handleNewPlayer}>
+        <Circle
+          position="right"
+          onPress={handleNewPlayer}
+          testID="navigateNewPlayerButton"
+        >
           <Icons name="plus-thick" size={26} />
         </Circle>
-        <Circle position="left" onPress={handlerModal}>
+        <Circle
+          position="left"
+          onPress={handlerModal}
+          testID="toggleModalButton"
+        >
           <Icons name="party-popper" size={26} />
         </Circle>
         {isModalVisible && (

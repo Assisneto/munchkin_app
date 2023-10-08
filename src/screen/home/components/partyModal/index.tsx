@@ -22,6 +22,7 @@ export const PartyModal: React.FC<PartyModalProps> = ({
 
   return (
     <Modal
+      testID="partyModal"
       animationType="slide"
       transparent={true}
       visible={isModalVisible}

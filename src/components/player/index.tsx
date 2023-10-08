@@ -30,7 +30,10 @@ const deleteComponent = (
   name: string
 ) => {
   return (
-    <DeleteContainer onPress={async () => await deletePlayer(name)}>
+    <DeleteContainer
+      testID={`deleteButton-${name}`}
+      onPress={async () => await deletePlayer(name)}
+    >
       <DeleteText>Deletar</DeleteText>
     </DeleteContainer>
   );
