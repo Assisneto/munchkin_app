@@ -7,6 +7,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import { SocketContext } from "../../socket/socket";
 import { SocketType } from "../../storage/socket";
 import { deletePlayerByName, getPlayers } from "../../storage/player";
+import { AppState } from "react-native";
+
 const { Socket: MockedSocket } = require("phoenix");
 
 const mockUseFocusEffectCallback = jest.fn();

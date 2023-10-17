@@ -20,6 +20,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "permissions": [],
       "package": "com.assisneto.munchkin"
     },
     "web": {
@@ -29,6 +30,16 @@
       "eas": {
         "projectId": "f7378914-516d-4970-b5af-00b3eb3623e4"
       }
-    }
+    },
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
+        }
+      ]
+    ]
   }
 }
