@@ -140,4 +140,34 @@ describe("<Home />", () => {
 
     expect(mockPush).toHaveBeenCalledWith("request_sync", {});
   });
+
+  it("emits request_sync event when app state changes to active and socketState is CLIENT", () => {
+    const mockPush = jest.fn();
+    mockChannelInstance.push = mockPush;
+    mockSocketContextValue.socketState = SocketType.CLIENT;
+
+    renderWithProviders(<Home />);
+
+    const appStateChange = AppState.addEventListener.mock.calls[0][1];
+    act(() => {
+      appStateChange("active");
+    });
+
+    expect(mockPush).toHaveBeenCalledWith("request_sync", {});
+  });
+
+  it("does not emit request_sync event when app state changes to active but socketState is not CLIENT", () => {
+    const mockPush = jest.fn();
+    mockChannelInstance.push = mockPush;
+    mockSocketContextValue.socketState = SocketType.HOST;
+
+    renderWithProviders(<Home />);
+
+    const appStateChange = AppState.addEventListener.mock.calls[0][1];
+    act(() => {
+      appStateChange("active");
+    });
+
+    expect(mockPush).not.toHaveBeenCalled();
+  });
 });

@@ -1,7 +1,8 @@
 import { useCallback, useContext, useEffect, useState } from "react";
 import { Circle, Container, Title } from "./styles";
+import { throttle } from "lodash";
 
-import { FlatList } from "react-native";
+import { AppState, AppStateStatus, FlatList } from "react-native";
 import { ThemeContext, ThemeType } from "../../theme/theme";
 
 import { Header } from "./components/header";
@@ -93,6 +94,24 @@ export const Home = () => {
   const handlerModal = () => {
     setModalVisible(!isModalVisible);
   };
+
+  const handlerAppState = useCallback(
+    throttle((state: AppStateStatus) => {
+      if (state === "active") {
+        executeBySocketType(socketState, SocketType.CLIENT, async () => {
+          await channel?.push("request_sync", {});
+        });
+      }
+    }, 1000),
+    [socketState, channel]
+  );
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener("change", handlerAppState);
+    return () => {
+      subscription.remove();
+    };
+  }, [handlerAppState]);
 
   useEffect(() => {
     executeBySocketType(socketState, SocketType.CLIENT, () => {
