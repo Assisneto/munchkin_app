@@ -3,4 +3,4 @@
 
 npm run test:badges
 git add coverage
-git commit --amend --no-edit
+git commit --no-verify -m 'Update coverage'
