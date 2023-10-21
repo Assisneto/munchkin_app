@@ -20,17 +20,26 @@ There are already many applications for the Munchkin board game, but there is so
 - WebSocket
 - Elixir (backend)
 - Phoenix (backend)
+- Channels (backend)
 
 ### Versions
 
 - v1
   - Show and edit level and strength of all players
-- v2 (current)
+- v2
+
   - Shared information of all players using realtime with websocket
 
-#### Future versions
-
-- v3
+- v3 (current)
   - Refactoring code and add tests
-- v4
+- v4 (development)
   - Improve realtime
+    - use GenStage in backend to maintain the socket state
+    - Add support to rooms
+
+#### First version of the app finished
+
+#### Next steps
+
+- v5
+  - Replace localStorage to [watermelonDB](https://github.com/Nozbe/WatermelonDB)
