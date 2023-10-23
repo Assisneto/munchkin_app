@@ -45,7 +45,10 @@ export const Player = ({ gender, level, name, power, deletePlayer }: Props) => {
   const handleEditPlayer = () => navigation.navigate("editPlayer", { name });
 
   return (
-    <Swipeable renderRightActions={() => deleteComponent(deletePlayer, name)}>
+    <Swipeable
+      renderRightActions={() => deleteComponent(deletePlayer, name)}
+      key={name}
+    >
       <Container onPress={handleEditPlayer}>
         <RowContainer
           testID={`playerContainer-${name}`}
