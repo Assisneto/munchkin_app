@@ -55,11 +55,6 @@ export const Home = () => {
     await handleSavePlayers(players);
   };
 
-  const onSyncPlayers = async () => {
-    const players = await getPlayers();
-    await channel?.push("syncing", { players });
-  };
-
   const onEditedPlayer = async (editedPlayer: playerType) => {
     await editPlayer(editedPlayer);
     await fetchPlayer();
@@ -120,10 +115,6 @@ export const Home = () => {
       channel?.on("deleted_player", onDeletedPlayer);
       channel?.on("synchronize", onCreatePlayers);
     });
-    executeBySocketType(socketState, SocketType.HOST, () => {
-      channel?.on("sync", onSyncPlayers);
-    });
-
     return () => {
       channel?.off("create_player");
       channel?.off("edited_player");
