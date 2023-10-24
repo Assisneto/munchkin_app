@@ -38,13 +38,6 @@ export const Home = () => {
     return setPlayers(players);
   };
 
-  const deletePlayer = async (name: string) => {
-    await deletePlayerByName(name);
-
-    await channel?.push("delete_player", { name });
-    return fetchPlayer();
-  };
-
   const onCreatePlayer = async (player: playerType) => {
     await handleSavePlayer(player);
   };
@@ -57,12 +50,22 @@ export const Home = () => {
     await fetchPlayer();
   };
 
+  const deletePlayerLocal = async (name: string) => {
+    await deletePlayerByName(name);
+    fetchPlayer(); // Fetch players after deletion
+  };
+
+  const deletePlayerAndNotify = async (name: string) => {
+    await deletePlayerLocal(name);
+    channel?.push("delete_player", { name }); // Notify the server of the deletion
+  };
+
   const onDeletedPlayer = async ({
     name: deletedPlayerName
   }: {
     name: string;
   }) => {
-    await deletePlayer(deletedPlayerName);
+    await deletePlayerLocal(deletedPlayerName); // Only update local state when a player is deleted, don't notify the server
   };
 
   const handleSavePlayer = async (player: playerType) => {
@@ -140,7 +143,7 @@ export const Home = () => {
                 level={item.level}
                 name={item.name}
                 power={item.power}
-                deletePlayer={deletePlayer}
+                deletePlayer={deletePlayerAndNotify}
               />
             );
           }}
