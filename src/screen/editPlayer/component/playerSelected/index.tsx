@@ -6,9 +6,7 @@ import { Gender } from "../../../../components/gender";
 import { editPlayer, playerType } from "../../../../storage/player";
 import { StatAdjuster } from "./statAdjuster";
 import { useSocket } from "../../../../hooks/useSocket";
-import { executeBySocketType } from "../../../../utils/executeBySocketType";
 import { SocketContext } from "../../../../socket/socket";
-import { SocketType } from "../../../../storage/socket";
 
 type Props = {
   initialPlayer: playerType;
@@ -34,9 +32,7 @@ export const PlayerSelected = ({ initialPlayer }: Props) => {
       setPlayer(updatedPlayer);
 
       if (channel) {
-        executeBySocketType(socketState, SocketType.HOST, () => {
-          channel.push("edit_player", updatedPlayer);
-        });
+        channel.push("edit_player", updatedPlayer);
       }
     } catch (error) {
       return;

@@ -20,8 +20,6 @@ import { useSocket } from "../../hooks/useSocket";
 import { Icons } from "./components/header/styles";
 import { PartyModal } from "./components/partyModal";
 import { SocketContext } from "../../socket/socket";
-import { executeBySocketType } from "../../utils/executeBySocketType";
-import { SocketType } from "../../storage/socket";
 
 export const Home = () => {
   // const { toggleTheme, theme } = useContext(ThemeContext);
@@ -42,9 +40,8 @@ export const Home = () => {
 
   const deletePlayer = async (name: string) => {
     await deletePlayerByName(name);
-    executeBySocketType(socketState, SocketType.HOST, async () => {
-      await channel?.push("delete_player", { name });
-    });
+
+    await channel?.push("delete_player", { name });
     return fetchPlayer();
   };
 
@@ -91,11 +88,9 @@ export const Home = () => {
   };
 
   const handlerAppState = useCallback(
-    throttle((state: AppStateStatus) => {
+    throttle(async (state: AppStateStatus) => {
       if (state === "active") {
-        executeBySocketType(socketState, SocketType.CLIENT, async () => {
-          await channel?.push("request_sync", {});
-        });
+        await channel?.push("request_sync", {});
       }
     }, 1000),
     [socketState, channel]
@@ -109,12 +104,11 @@ export const Home = () => {
   }, [handlerAppState]);
 
   useEffect(() => {
-    executeBySocketType(socketState, SocketType.CLIENT, () => {
-      channel?.on("create_player", onCreatePlayer);
-      channel?.on("edited_player", onEditedPlayer);
-      channel?.on("deleted_player", onDeletedPlayer);
-      channel?.on("synchronize", onCreatePlayers);
-    });
+    channel?.on("create_player", onCreatePlayer);
+    channel?.on("edited_player", onEditedPlayer);
+    channel?.on("deleted_player", onDeletedPlayer);
+    channel?.on("synchronize", onCreatePlayers);
+
     return () => {
       channel?.off("create_player");
       channel?.off("edited_player");
@@ -130,9 +124,7 @@ export const Home = () => {
   );
 
   useEffect(() => {
-    executeBySocketType(socketState, SocketType.CLIENT, async () => {
-      await channel?.push("request_sync", {});
-    });
+    (async () => await channel?.push("request_sync", {}))();
   }, [channel, socketState]);
 
   return (

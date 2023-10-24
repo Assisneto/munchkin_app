@@ -33,14 +33,8 @@ export const PartyModal: React.FC<PartyModalProps> = ({
           <TouchableWithoutFeedback onPress={() => {}}>
             <ModalContainer>
               <ModalText>Select Role</ModalText>
-              <Button
-                title="Host"
-                onPress={() => handlerModalChoice(SocketType.HOST)}
-              />
-              <Button
-                title="Guest"
-                onPress={() => handlerModalChoice(SocketType.CLIENT)}
-              />
+              <Button title="Host" onPress={() => hideModal()} />
+              <Button title="Guest" onPress={() => hideModal()} />
             </ModalContainer>
           </TouchableWithoutFeedback>
         </ModalBackground>

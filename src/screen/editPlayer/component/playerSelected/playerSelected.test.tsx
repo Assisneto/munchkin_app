@@ -11,7 +11,6 @@ jest.mock("../../../../storage/player", () => ({
 jest.mock("../../../../hooks/useSocket", () => ({
   useSocket: jest.fn().mockReturnValue({ channel: jest.fn() })
 }));
-jest.mock("../../../../utils/executeBySocketType");
 jest.mock("../../../../socket/socket");
 
 describe("<PlayerSelected />", () => {

@@ -13,9 +13,7 @@ import {
 import { savePlayer } from "../../storage/player";
 import { useSocket } from "../../hooks/useSocket";
 import { SocketContext } from "../../socket/socket";
-import { executeBySocketType } from "../../utils/executeBySocketType";
 import { useNavigation } from "@react-navigation/native";
-import { SocketType } from "../../storage/socket";
 
 const MALE = "male";
 const FEMALE = "female";
@@ -44,9 +42,7 @@ export const NewPlayer = () => {
       await savePlayer(playerData);
       backToHome();
       if (channel) {
-        executeBySocketType(socketState, SocketType.HOST, () => {
-          channel.push("new_player", playerData);
-        });
+        channel.push("new_player", playerData);
       }
     } catch (error) {
       if (error instanceof Error) {
