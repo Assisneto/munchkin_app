@@ -1,8 +1,8 @@
 import { useCallback, useContext, useEffect, useState } from "react";
-import { Circle, Container, Title } from "./styles";
+import { Circle, Container, SwitchWrapper } from "./styles";
 import { throttle } from "lodash";
 
-import { AppState, AppStateStatus, FlatList } from "react-native";
+import { AppState, AppStateStatus, FlatList, Platform } from "react-native";
 import { ThemeContext, ThemeType } from "../../theme/theme";
 
 import { Header } from "./components/header";
@@ -20,9 +20,10 @@ import { useSocket } from "../../hooks/useSocket";
 import { Icons } from "./components/header/styles";
 import { PartyModal } from "./components/partyModal";
 import { SocketContext } from "../../socket/socket";
+import { Switch } from "react-native-gesture-handler";
 
 export const Home = () => {
-  // const { toggleTheme, theme } = useContext(ThemeContext);
+  const { toggleTheme, theme } = useContext(ThemeContext);
   const { socketState } = useContext(SocketContext);
   const navigation = useNavigation();
   const { channel } = useSocket("room:lobby");
@@ -96,7 +97,7 @@ export const Home = () => {
         await channel?.push("request_sync", {});
       }
     }, 1000),
-    [socketState, channel]
+    [channel]
   );
 
   useEffect(() => {
@@ -118,7 +119,7 @@ export const Home = () => {
       channel?.off("deleted_player");
       channel?.off("synchronize");
     };
-  }, [channel, socketState]);
+  }, [channel]);
 
   useFocusEffect(
     useCallback(() => {
@@ -128,7 +129,7 @@ export const Home = () => {
 
   useEffect(() => {
     (async () => await channel?.push("request_sync", {}))();
-  }, [channel, socketState]);
+  }, [channel]);
 
   return (
     <>
@@ -167,9 +168,12 @@ export const Home = () => {
         {isModalVisible && (
           <PartyModal isModalVisible hideModal={handlerModal} />
         )}
-        <Title>{socketState}</Title>
-        {/* <Switch value={isDarkMode} onValueChange={toggleTheme} />
-         */}
+        <SwitchWrapper>
+          <Switch
+            value={theme === ThemeType.dark}
+            onValueChange={toggleTheme}
+          />
+        </SwitchWrapper>
       </Container>
     </>
   );

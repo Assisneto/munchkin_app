@@ -10,13 +10,10 @@ export const Container = styled.View`
   padding: 0 15px;
 `;
 
-export const Title = styled.Text`
-  font-size: 20px;
-  font-weight: bold;
-  color: ${(props) => props.theme.colors.text};
+export const SwitchWrapper = styled.Text`
   padding-bottom: 10px;
   position: absolute;
-  bottom: 1px;
+  bottom: 2%;
   left: 50%;
 `;
 export const Circle = styled.TouchableOpacity<CircleProps>`
