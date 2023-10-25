@@ -62,11 +62,32 @@ async function editPlayer(updatedPlayer: playerType) {
   await saveToLocalStorage("player", updatedPlayers);
 }
 
+async function editPlayers(
+  playersToUpdate: playerType[],
+  updatedData: Partial<playerType>
+) {
+  const players = await getPlayers();
+
+  const updatedPlayers = players.map((player) => {
+    const shouldUpdate = playersToUpdate.some(
+      (updatePlayer) => updatePlayer.name === player.name
+    );
+
+    if (shouldUpdate) {
+      return { ...player, ...updatedData };
+    }
+    return player;
+  });
+
+  await saveToLocalStorage("player", updatedPlayers);
+}
+
 export {
   savePlayer,
   getPlayers,
   deletePlayerByName,
   editPlayer,
   savePlayers,
-  playerType
+  playerType,
+  editPlayers
 };
