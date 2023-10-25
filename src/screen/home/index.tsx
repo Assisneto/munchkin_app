@@ -51,14 +51,18 @@ export const Home = () => {
     await fetchPlayer();
   };
 
+  const resetAllPlayersNotify = async (): Promise<void> => {
+    await channel?.push("reset_all_players", {});
+  };
+
   const deletePlayerLocal = async (name: string) => {
     await deletePlayerByName(name);
-    fetchPlayer(); // Fetch players after deletion
+    fetchPlayer();
   };
 
   const deletePlayerAndNotify = async (name: string) => {
     await deletePlayerLocal(name);
-    channel?.push("delete_player", { name }); // Notify the server of the deletion
+    channel?.push("delete_player", { name });
   };
 
   const onDeletedPlayer = async ({
@@ -66,7 +70,7 @@ export const Home = () => {
   }: {
     name: string;
   }) => {
-    await deletePlayerLocal(deletedPlayerName); // Only update local state when a player is deleted, don't notify the server
+    await deletePlayerLocal(deletedPlayerName);
   };
 
   const handleSavePlayer = async (player: playerType) => {
@@ -133,7 +137,11 @@ export const Home = () => {
 
   return (
     <>
-      <Header />
+      <Header
+        players={players}
+        reloadStateFunction={fetchPlayer}
+        resetAllPlayersNotify={resetAllPlayersNotify}
+      />
       <Container>
         <FlatList
           data={players}
