@@ -3,7 +3,8 @@ import {
   getPlayers,
   deletePlayerByName,
   editPlayer,
-  savePlayers
+  savePlayers,
+  editPlayers
 } from ".";
 
 import { saveToLocalStorage, loadFromLocalStorage } from "../localStorage";
@@ -145,7 +146,7 @@ describe("Player utility functions", () => {
         power: -1,
         level: 1
       })
-    ).rejects.toThrow("O nível do jogador não pode ser menor do que 1!"); // You might want to correct the error message in your actual function.
+    ).rejects.toThrow("O nível do jogador não pode ser menor do que 1!");
   });
 
   it("should not change players if the name of the player to be edited is not found", async () => {
@@ -195,5 +196,57 @@ describe("Player utility functions", () => {
     await savePlayers([]);
 
     expect(saveToLocalStorage).toHaveBeenCalledWith("player", []);
+  });
+
+  it("should update specified players with new data", async () => {
+    (loadFromLocalStorage as jest.Mock).mockResolvedValue([
+      { name: "John", gender: "male", power: 10, level: 1 },
+      { name: "Jane", gender: "female", power: 15, level: 2 }
+    ]);
+
+    const playersToUpdate = [
+      { name: "John", gender: "male", power: 10, level: 1 }
+    ];
+
+    await editPlayers(playersToUpdate, { power: 20 });
+
+    expect(saveToLocalStorage).toHaveBeenCalledWith("player", [
+      { name: "John", gender: "male", power: 20, level: 1 },
+      { name: "Jane", gender: "female", power: 15, level: 2 }
+    ]);
+  });
+
+  it("should not change players not in the update list", async () => {
+    (loadFromLocalStorage as jest.Mock).mockResolvedValue([
+      { name: "John", gender: "male", power: 10, level: 1 },
+      { name: "Jane", gender: "female", power: 15, level: 2 }
+    ]);
+
+    const playersToUpdate = [
+      { name: "Doe", gender: "male", power: 5, level: 1 }
+    ];
+
+    await editPlayers(playersToUpdate, { power: 20 });
+
+    expect(saveToLocalStorage).toHaveBeenCalledWith("player", [
+      { name: "John", gender: "male", power: 10, level: 1 },
+      { name: "Jane", gender: "female", power: 15, level: 2 }
+    ]);
+  });
+
+  it("should not change the player list if no players match the update list", async () => {
+    (loadFromLocalStorage as jest.Mock).mockResolvedValue([
+      { name: "John", gender: "male", power: 10, level: 1 }
+    ]);
+
+    const playersToUpdate = [
+      { name: "Jane", gender: "female", power: 15, level: 2 }
+    ];
+
+    await editPlayers(playersToUpdate, { power: 20 });
+
+    expect(saveToLocalStorage).toHaveBeenCalledWith("player", [
+      { name: "John", gender: "male", power: 10, level: 1 }
+    ]);
   });
 });

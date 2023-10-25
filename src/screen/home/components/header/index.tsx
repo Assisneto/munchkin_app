@@ -1,5 +1,6 @@
 import { editPlayers, playerType } from "../../../../storage/player";
 import { Container, Icons, Options, Title } from "./styles";
+import { editPlayers as mockEditPlayers } from "../../../../storage/player";
 
 import { TouchableOpacity } from "react-native";
 
@@ -26,11 +27,14 @@ export const Header = ({
 
   return (
     <>
-      <Container>
+      <Container testID="headerContainer">
         <Title>Munchkins</Title>
         <Title></Title>
         <Options>
-          <TouchableOpacity onPress={() => resetAllPlayers()}>
+          <TouchableOpacity
+            testID="resetButton"
+            onPress={() => resetAllPlayers()}
+          >
             <Icons name="backup-restore" size={ICONSIZE} />
           </TouchableOpacity>
           <TouchableOpacity>
