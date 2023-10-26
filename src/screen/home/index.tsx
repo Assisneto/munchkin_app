@@ -2,13 +2,7 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import { Circle, Container, SwitchWrapper } from "./styles";
 import { throttle } from "lodash";
 
-import {
-  AppState,
-  AppStateStatus,
-  Button,
-  FlatList,
-  Platform
-} from "react-native";
+import { AppState, AppStateStatus, FlatList } from "react-native";
 import { ThemeContext, ThemeType } from "../../theme/theme";
 
 import { Header } from "./components/header";
@@ -24,17 +18,13 @@ import {
 } from "../../storage/player";
 import { useSocket } from "../../hooks/useSocket";
 import { Icons } from "./components/header/styles";
-import { PartyModal } from "./components/partyModal";
 import { SocketContext } from "../../socket/socket";
-import { Switch } from "react-native-gesture-handler";
 
 export const Home = () => {
   const { setSpecificTheme, theme } = useContext(ThemeContext);
-  const { socketState } = useContext(SocketContext);
   const navigation = useNavigation();
   const { channel } = useSocket("room:lobby");
   const [players, setPlayers] = useState<playerType[] | []>();
-  const [isModalVisible, setModalVisible] = useState(false);
 
   const nextThemeMap = {
     [ThemeType.dark]: ThemeType.light,
@@ -101,10 +91,6 @@ export const Home = () => {
     } catch (error) {
       console.error("Error saving player:", error);
     }
-  };
-
-  const handlerModal = () => {
-    setModalVisible(!isModalVisible);
   };
 
   const handlerAppState = useCallback(
@@ -178,16 +164,9 @@ export const Home = () => {
         >
           <Icons name="plus-thick" size={26} />
         </Circle>
-        <Circle
-          position="left"
-          onPress={handlerModal}
-          testID="toggleModalButton"
-        >
+        <Circle position="left" onPress={() => {}} testID="toggleModalButton">
           <Icons name="party-popper" size={26} />
         </Circle>
-        {isModalVisible && (
-          <PartyModal isModalVisible hideModal={handlerModal} />
-        )}
         <SwitchWrapper>
           <Icons
             name="theme-light-dark"

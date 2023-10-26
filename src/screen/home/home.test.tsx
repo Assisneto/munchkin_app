@@ -98,18 +98,6 @@ describe("<Home />", () => {
     });
   });
 
-  it("toggles the visibility of the modal", async () => {
-    const { getByTestId, queryByTestId, findByTestId } = renderWithProviders(
-      <Home />
-    );
-
-    expect(queryByTestId("partyModal")).toBeNull();
-
-    fireEvent.press(getByTestId("toggleModalButton"));
-
-    const partyModal = await findByTestId("partyModal");
-    expect(partyModal).toBeTruthy();
-  });
   it("navigates to the new player screen when the 'plus' button is pressed", async () => {
     const { getByTestId } = renderWithProviders(<Home />);
     act(() => {
