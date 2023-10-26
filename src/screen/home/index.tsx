@@ -2,7 +2,13 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import { Circle, Container, SwitchWrapper } from "./styles";
 import { throttle } from "lodash";
 
-import { AppState, AppStateStatus, FlatList, Platform } from "react-native";
+import {
+  AppState,
+  AppStateStatus,
+  Button,
+  FlatList,
+  Platform
+} from "react-native";
 import { ThemeContext, ThemeType } from "../../theme/theme";
 
 import { Header } from "./components/header";
@@ -23,12 +29,18 @@ import { SocketContext } from "../../socket/socket";
 import { Switch } from "react-native-gesture-handler";
 
 export const Home = () => {
-  const { toggleTheme, theme } = useContext(ThemeContext);
+  const { setSpecificTheme, theme } = useContext(ThemeContext);
   const { socketState } = useContext(SocketContext);
   const navigation = useNavigation();
   const { channel } = useSocket("room:lobby");
   const [players, setPlayers] = useState<playerType[] | []>();
   const [isModalVisible, setModalVisible] = useState(false);
+
+  const nextThemeMap = {
+    [ThemeType.dark]: ThemeType.light,
+    [ThemeType.light]: ThemeType.default,
+    [ThemeType.default]: ThemeType.dark
+  };
 
   const handleNewPlayer = () => {
     navigation.navigate("newPlayer");
@@ -177,9 +189,11 @@ export const Home = () => {
           <PartyModal isModalVisible hideModal={handlerModal} />
         )}
         <SwitchWrapper>
-          <Switch
-            value={theme === ThemeType.dark}
-            onValueChange={toggleTheme}
+          <Icons
+            name="theme-light-dark"
+            size={34}
+            onPress={() => setSpecificTheme(nextThemeMap[theme])}
+            testID="theme-switch-icon"
           />
         </SwitchWrapper>
       </Container>

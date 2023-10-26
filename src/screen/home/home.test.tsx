@@ -2,7 +2,7 @@ import React, { ReactNode } from "react";
 import { render, act, fireEvent, waitFor } from "@testing-library/react-native";
 import { Home } from ".";
 import { ThemeProvider } from "styled-components/native";
-import { themes } from "../../theme/theme";
+import { ThemeContext, ThemeType, themes } from "../../theme/theme";
 import { NavigationContainer } from "@react-navigation/native";
 import { SocketContext } from "../../socket/socket";
 import { SocketType } from "../../storage/socket";
@@ -37,11 +37,18 @@ const mockSocketContextValue = {
   setSocketState: jest.fn()
 };
 
+const mockThemeContextValue = {
+  theme: ThemeType.dark,
+  setSpecificTheme: jest.fn()
+};
+
 const renderWithProviders = (children: ReactNode) => {
   return render(
     <ThemeProvider theme={themes.dark}>
       <SocketContext.Provider value={mockSocketContextValue}>
-        <NavigationContainer>{children}</NavigationContainer>
+        <ThemeContext.Provider value={mockThemeContextValue}>
+          <NavigationContainer>{children}</NavigationContainer>
+        </ThemeContext.Provider>
       </SocketContext.Provider>
     </ThemeProvider>
   );
@@ -144,5 +151,21 @@ describe("<Home />", () => {
     });
 
     expect(mockPush).toHaveBeenCalledWith("request_sync", {});
+  });
+
+  it("switches theme when the theme icon is pressed", async () => {
+    const { getByTestId } = renderWithProviders(<Home />);
+
+    act(() => {
+      mockUseFocusEffectCallback();
+    });
+
+    const themeSwitchIcon = getByTestId("theme-switch-icon");
+
+    await act(async () => {
+      fireEvent.press(themeSwitchIcon);
+    });
+
+    expect(mockThemeContextValue.setSpecificTheme).toHaveBeenCalled();
   });
 });
