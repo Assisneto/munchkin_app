@@ -9,7 +9,10 @@ export const useSocket = (channelName: string): UseSocketReturn => {
   const [channel, setChannel] = useState<Channel | null>(null);
 
   useEffect(() => {
-    const socket = new Socket(process.env.EXPO_PUBLIC_SOCKET_URL || "", {});
+    const socket = new Socket(
+      `ws://${process.env.EXPO_PUBLIC_SOCKET_URL}/socket` || "",
+      {}
+    );
 
     socket.onOpen(() => console.log("Connected."));
     socket.onError((event) => console.log("Cannot connect.", event));

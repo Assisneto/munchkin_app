@@ -19,8 +19,14 @@ describe("useSocket hook", () => {
 
     renderHook(() => useSocket(channelName));
 
-    expect(Socket).toHaveBeenCalledWith(socketUrl, expect.anything());
-    expect(new Socket(socketUrl).channel).toHaveBeenCalledWith(channelName, {});
+    expect(Socket).toHaveBeenCalledWith(
+      `ws://${socketUrl}/socket`,
+      expect.anything()
+    );
+    expect(new Socket(`ws://${socketUrl}/socket`).channel).toHaveBeenCalledWith(
+      channelName,
+      {}
+    );
   });
 
   it("should console log on various socket events", () => {
