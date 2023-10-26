@@ -1,9 +1,10 @@
 import { editPlayers, playerType } from "../../../../storage/player";
 import { Container, Icons, Options, Title } from "./styles";
-import { editPlayers as mockEditPlayers } from "../../../../storage/player";
+import { Dice } from "./../../../../components/dice";
 
 import { TouchableOpacity } from "react-native";
-
+import { useState } from "react";
+const ICONSIZE = 26;
 interface HeaderProps {
   players: playerType[] | undefined;
   reloadStateFunction: () => Promise<void>;
@@ -15,7 +16,8 @@ export const Header = ({
   reloadStateFunction,
   resetAllPlayersNotify
 }: HeaderProps) => {
-  const ICONSIZE = 26;
+  const [showDiceModal, setShowDiceModal] = useState<boolean>(false);
+  const [diceRoll, setDiceRoll] = useState<number>(1);
 
   const resetAllPlayers = async () => {
     if (players && players.length > 0) {
@@ -23,6 +25,14 @@ export const Header = ({
       await reloadStateFunction();
       await resetAllPlayersNotify();
     }
+  };
+  const rollDice = () => {
+    const roll = Math.floor(Math.random() * 6) + 1;
+    setDiceRoll(roll);
+  };
+
+  const closeModal = () => {
+    setShowDiceModal(false);
   };
 
   return (
@@ -40,13 +50,24 @@ export const Header = ({
           <TouchableOpacity>
             <Icons name="pencil" size={ICONSIZE} />
           </TouchableOpacity>
-          <TouchableOpacity>
-            <Icons name="dice-multiple" size={ICONSIZE} />
+          <TouchableOpacity
+            onPress={() => {
+              rollDice();
+              setShowDiceModal(!showDiceModal);
+            }}
+          >
+            <Icons name="dice-multiple" size={ICONSIZE} testID="diceIcon" />
           </TouchableOpacity>
           <TouchableOpacity>
             <Icons name="cog" size={ICONSIZE} />
           </TouchableOpacity>
         </Options>
+        <Dice
+          visible={showDiceModal}
+          diceNumber={diceRoll}
+          onClose={closeModal}
+          onRoll={rollDice}
+        />
       </Container>
     </>
   );

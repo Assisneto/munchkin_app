@@ -40,7 +40,7 @@ describe("<Dice />", () => {
       />
     );
 
-    const background = getByTestId("backgroundTouchable"); // Consider adding `testID="backgroundTouchable"` to the outer TouchableOpacity for this to work
+    const background = getByTestId("backgroundTouchable");
     fireEvent.press(background);
     expect(mockOnClose).toHaveBeenCalledTimes(1);
   });
@@ -55,7 +55,7 @@ describe("<Dice />", () => {
       />
     );
 
-    const diceIconTouchable = getByTestId("diceIconTouchable"); // Consider adding `testID="diceIconTouchable"` to the TouchableOpacity wrapping the dice icon
+    const diceIconTouchable = getByTestId("diceIconTouchable");
     fireEvent.press(diceIconTouchable);
     expect(mockOnRoll).toHaveBeenCalledTimes(1);
   });

@@ -80,4 +80,45 @@ describe("<Header />", () => {
     expect(mockReloadStateFunction).not.toHaveBeenCalled();
     expect(mockResetAllPlayersNotify).not.toHaveBeenCalled();
   });
+
+  it("rolls the dice and shows the dice modal when dice icon is pressed", async () => {
+    const { getByTestId } = renderWithTheme(
+      <Header
+        players={[]}
+        reloadStateFunction={mockReloadStateFunction}
+        resetAllPlayersNotify={mockResetAllPlayersNotify}
+      />
+    );
+
+    const diceIcon = getByTestId("diceIcon");
+    await act(async () => {
+      fireEvent.press(diceIcon);
+    });
+
+    const diceModal = getByTestId("diceModal");
+    expect(diceModal).toBeTruthy();
+  });
+
+  it("closes the dice modal when onClose is called", async () => {
+    const { getByTestId, queryByTestId } = renderWithTheme(
+      <Header
+        players={[]}
+        reloadStateFunction={mockReloadStateFunction}
+        resetAllPlayersNotify={mockResetAllPlayersNotify}
+      />
+    );
+
+    const diceIcon = getByTestId("diceIcon");
+    await act(async () => {
+      fireEvent.press(diceIcon);
+    });
+
+    const modalCloseButton = getByTestId("backgroundTouchable");
+    await act(async () => {
+      fireEvent.press(modalCloseButton);
+    });
+
+    const diceModal = queryByTestId("diceModal");
+    expect(diceModal.props.visible).toBe(false);
+  });
 });
