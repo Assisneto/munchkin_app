@@ -140,20 +140,4 @@ describe("<Home />", () => {
 
     expect(mockPush).toHaveBeenCalledWith("request_sync", {});
   });
-
-  it("switches theme when the theme icon is pressed", async () => {
-    const { getByTestId } = renderWithProviders(<Home />);
-
-    act(() => {
-      mockUseFocusEffectCallback();
-    });
-
-    const themeSwitchIcon = getByTestId("theme-switch-icon");
-
-    await act(async () => {
-      fireEvent.press(themeSwitchIcon);
-    });
-
-    expect(mockThemeContextValue.setSpecificTheme).toHaveBeenCalled();
-  });
 });

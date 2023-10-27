@@ -1,9 +1,9 @@
 import { editPlayers, playerType } from "../../../../storage/player";
 import { Container, Icons, Options, Title } from "./styles";
 import { Dice } from "./../../../../components/dice";
-
+import { ThemeContext, ThemeType } from "../../../../theme/theme";
 import { TouchableOpacity } from "react-native";
-import { useState } from "react";
+import { useContext, useState } from "react";
 const ICONSIZE = 26;
 interface HeaderProps {
   players: playerType[] | undefined;
@@ -18,6 +18,13 @@ export const Header = ({
 }: HeaderProps) => {
   const [showDiceModal, setShowDiceModal] = useState<boolean>(false);
   const [diceRoll, setDiceRoll] = useState<number>(1);
+  const { setSpecificTheme, theme } = useContext(ThemeContext);
+
+  const nextThemeMap = {
+    [ThemeType.dark]: ThemeType.light,
+    [ThemeType.light]: ThemeType.default,
+    [ThemeType.default]: ThemeType.dark
+  };
 
   const resetAllPlayers = async () => {
     if (players && players.length > 0) {
@@ -47,9 +54,7 @@ export const Header = ({
           >
             <Icons name="backup-restore" size={ICONSIZE} />
           </TouchableOpacity>
-          <TouchableOpacity>
-            <Icons name="pencil" size={ICONSIZE} />
-          </TouchableOpacity>
+
           <TouchableOpacity
             onPress={() => {
               rollDice();
@@ -58,9 +63,12 @@ export const Header = ({
           >
             <Icons name="dice-multiple" size={ICONSIZE} testID="diceIcon" />
           </TouchableOpacity>
-          <TouchableOpacity>
-            <Icons name="cog" size={ICONSIZE} />
-          </TouchableOpacity>
+          <Icons
+            name="theme-light-dark"
+            size={ICONSIZE}
+            onPress={() => setSpecificTheme(nextThemeMap[theme])}
+            testID="theme-switch-icon"
+          />
         </Options>
         <Dice
           visible={showDiceModal}

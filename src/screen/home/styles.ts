@@ -10,12 +10,6 @@ export const Container = styled.View`
   padding: 0 15px;
 `;
 
-export const SwitchWrapper = styled.Text`
-  padding-bottom: 10px;
-  position: absolute;
-  bottom: 5%;
-  left: 50%;
-`;
 export const Circle = styled.TouchableOpacity<CircleProps>`
   width: 60px;
   height: 60px;

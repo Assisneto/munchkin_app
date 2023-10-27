@@ -2,11 +2,20 @@ import { render, fireEvent, act } from "@testing-library/react-native";
 import React, { ReactNode } from "react";
 import { Header } from ".";
 import { ThemeProvider } from "styled-components/native";
-import { themes } from "../../../../theme/theme";
+import { ThemeContext, ThemeType, themes } from "../../../../theme/theme";
 import { editPlayers as mockEditPlayers } from "../../../../storage/player";
 
+const mockThemeContextValue = {
+  theme: ThemeType.dark,
+  setSpecificTheme: jest.fn()
+};
+
 const renderWithTheme = (component: ReactNode) => {
-  return render(<ThemeProvider theme={themes.dark}>{component}</ThemeProvider>);
+  return render(
+    <ThemeContext.Provider value={mockThemeContextValue}>
+      <ThemeProvider theme={themes.dark}>{component}</ThemeProvider>
+    </ThemeContext.Provider>
+  );
 };
 
 jest.mock("../../../../storage/player", () => ({
@@ -120,5 +129,22 @@ describe("<Header />", () => {
 
     const diceModal = queryByTestId("diceModal");
     expect(diceModal.props.visible).toBe(false);
+  });
+  it("switches theme when the theme icon is pressed", async () => {
+    const { getByTestId } = renderWithTheme(
+      <Header
+        players={[]}
+        reloadStateFunction={mockReloadStateFunction}
+        resetAllPlayersNotify={mockResetAllPlayersNotify}
+      />
+    );
+
+    const themeSwitchIcon = getByTestId("theme-switch-icon");
+
+    await act(async () => {
+      fireEvent.press(themeSwitchIcon);
+    });
+
+    expect(mockThemeContextValue.setSpecificTheme).toHaveBeenCalled();
   });
 });
