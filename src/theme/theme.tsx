@@ -1,8 +1,9 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import { ThemeProvider as ThemeProviderStyled } from "styled-components/native";
 import { darkTheme } from "./darkTheme";
 import { lightTheme } from "./lightTheme";
 import { defaultTheme } from "./defaultTheme";
+import { loadTheme, saveTheme } from "../storage/theme";
 
 export enum ThemeType {
   light = "light",
@@ -24,10 +25,22 @@ export const ThemeContext = createContext({
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   children
 }) => {
-  const [theme, setTheme] = useState(ThemeType.default);
+  const [theme, setTheme] = useState<ThemeType>(ThemeType.default);
 
-  const setSpecificTheme = (selectedTheme: ThemeType) =>
+  useEffect(() => {
+    async function loadThemeOfStorage() {
+      const storedTheme = await loadTheme();
+      if (storedTheme) {
+        setTheme(storedTheme);
+      }
+    }
+    loadThemeOfStorage();
+  }, []);
+
+  const setSpecificTheme = (selectedTheme: ThemeType) => {
     setTheme(selectedTheme);
+    saveTheme(selectedTheme);
+  };
 
   return (
     <ThemeContext.Provider value={{ theme, setSpecificTheme }}>
