@@ -11,4 +11,8 @@ const loadFromLocalStorage = async <T>(key: string): Promise<T | null> => {
   return JSON.parse(dataString) as T;
 };
 
+export function removeFromLocalStorage(key: string): void {
+  AsyncStorage.removeItem(key);
+}
+
 export { saveToLocalStorage, loadFromLocalStorage };
