@@ -6,6 +6,7 @@ import { AppState, AppStateStatus, FlatList } from "react-native";
 
 import { Header } from "./components/header";
 import { Player } from "../../components/player";
+import { RoomModal } from "./components/room";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import {
   deletePlayerByName,
@@ -22,6 +23,7 @@ export const Home = () => {
   const navigation = useNavigation();
   const { channel } = useSocket("room:lobby");
   const [players, setPlayers] = useState<playerType[] | []>();
+  const [isModalVisible, setModalVisible] = useState(false);
 
   const handleNewPlayer = () => {
     navigation.navigate("newPlayer");
@@ -93,6 +95,10 @@ export const Home = () => {
     [channel]
   );
 
+  const handlerRoomModal = () => {
+    setModalVisible(!isModalVisible);
+  };
+
   useEffect(() => {
     const subscription = AppState.addEventListener("change", handlerAppState);
     return () => {
@@ -155,9 +161,16 @@ export const Home = () => {
         >
           <Icons name="plus-thick" size={26} />
         </Circle>
-        <Circle position="left" onPress={() => {}} testID="toggleModalButton">
+        <Circle
+          position="left"
+          onPress={handlerRoomModal}
+          testID="toggleModalButton"
+        >
           <Icons name="party-popper" size={26} />
         </Circle>
+        {isModalVisible && (
+          <RoomModal isModalVisible hideModal={handlerRoomModal} />
+        )}
       </Container>
     </>
   );
