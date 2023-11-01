@@ -25,7 +25,8 @@ const mockSocket: PhoenixSocket = {
   onOpen: jest.fn(),
   onError: jest.fn(),
   onClose: jest.fn(),
-  connect: jest.fn()
+  connect: jest.fn(),
+  disconnect: jest.fn()
 } as any;
 
 export const Socket = jest.fn((endPoint: string, opts?: object) => mockSocket);
