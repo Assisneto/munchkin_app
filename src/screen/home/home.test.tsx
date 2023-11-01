@@ -5,15 +5,20 @@ import { ThemeProvider } from "styled-components/native";
 import { ThemeContext, ThemeType, themes } from "../../theme/theme";
 import { NavigationContainer } from "@react-navigation/native";
 import { SocketContext } from "../../socket/socket";
-import { SocketType } from "../../storage/socket";
 import { deletePlayerByName, getPlayers } from "../../storage/player";
 import { AppState } from "react-native";
-
-const { Socket: MockedSocket } = require("phoenix");
+import * as PhoenixMocks from "phoenix";
+import * as roomStorage from "../../storage/room";
+const { Socket: MockedSocket, Channel: MockedChannel } = PhoenixMocks;
 
 const mockUseFocusEffectCallback = jest.fn();
-const mockSocketInstance = new MockedSocket("");
-const mockChannelInstance = mockSocketInstance.channel("");
+
+jest.mock("../../storage/room");
+
+const mockedGetRoomID = roomStorage.getRoomID as jest.MockedFunction<
+  typeof roomStorage.getRoomID
+>;
+
 const mockedDeletePlayerByName = deletePlayerByName as jest.Mock;
 const mockNavigation = { navigate: jest.fn(), goBack: jest.fn() };
 
@@ -28,14 +33,6 @@ jest.mock("@react-navigation/native", () => ({
   useNavigation: () => mockNavigation,
   NavigationContainer: ({ children }: { children: ReactNode }) => children
 }));
-jest.mock("../../hooks/useSocket", () => ({
-  useSocket: () => ({ channel: mockChannelInstance })
-}));
-
-const mockSocketContextValue = {
-  socketState: SocketType.HOST,
-  setSocketState: jest.fn()
-};
 
 const mockThemeContextValue = {
   theme: ThemeType.dark,
@@ -45,11 +42,9 @@ const mockThemeContextValue = {
 const renderWithProviders = (children: ReactNode) => {
   return render(
     <ThemeProvider theme={themes.dark}>
-      <SocketContext.Provider value={mockSocketContextValue}>
-        <ThemeContext.Provider value={mockThemeContextValue}>
-          <NavigationContainer>{children}</NavigationContainer>
-        </ThemeContext.Provider>
-      </SocketContext.Provider>
+      <ThemeContext.Provider value={mockThemeContextValue}>
+        <NavigationContainer>{children}</NavigationContainer>
+      </ThemeContext.Provider>
     </ThemeProvider>
   );
 };
@@ -127,17 +122,35 @@ describe("<Home />", () => {
     });
   });
 
-  it("emits request_sync event when app state changes to active", () => {
-    const mockPush = jest.fn();
-    mockChannelInstance.push = mockPush;
+  it("emits request_sync event when app state changes to active", async () => {
+    const MockedChannelInstance = new MockedChannel("");
+    mockedGetRoomID.mockResolvedValueOnce("room1");
 
-    renderWithProviders(<Home />);
+    const socketContextValue = {
+      socket: MockedSocket,
+      channel: MockedChannelInstance,
+      setRoomID: jest.fn(),
+      roomID: "sampleRoomID"
+    };
+
+    const { root } = render(
+      <ThemeProvider theme={themes.dark}>
+        <ThemeContext.Provider value={mockThemeContextValue}>
+          <NavigationContainer>
+            <SocketContext.Provider value={socketContextValue}>
+              <Home />
+            </SocketContext.Provider>
+          </NavigationContainer>
+        </ThemeContext.Provider>
+      </ThemeProvider>
+    );
 
     const appStateChange = AppState.addEventListener.mock.calls[0][1];
-    act(() => {
+
+    await act(() => {
       appStateChange("active");
     });
 
-    expect(mockPush).toHaveBeenCalledWith("request_sync", {});
+    expect(MockedChannelInstance.push).toHaveBeenCalledWith("request_sync", {});
   });
 });

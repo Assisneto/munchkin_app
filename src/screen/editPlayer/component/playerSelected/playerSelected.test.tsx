@@ -3,14 +3,15 @@ import { fireEvent, render, waitFor } from "@testing-library/react-native";
 import { PlayerSelected } from ".";
 import { ThemeProvider } from "styled-components/native";
 import { themes } from "../../../../theme/theme";
+import { SocketContext } from "../../../../socket/socket";
+import * as PhoenixMocks from "phoenix";
 
-// Mock the required external dependencies
+const { Channel: MockedChannel } = PhoenixMocks;
+
 jest.mock("../../../../storage/player", () => ({
   editPlayer: jest.fn()
 }));
-jest.mock("../../../../hooks/useSocket", () => ({
-  useSocket: jest.fn().mockReturnValue({ channel: jest.fn() })
-}));
+jest.mock("phoenix");
 jest.mock("../../../../socket/socket");
 
 describe("<PlayerSelected />", () => {
@@ -36,7 +37,6 @@ describe("<PlayerSelected />", () => {
     expect(getByText("15")).toBeTruthy();
   });
 
-  // Assuming Gender component and StatAdjuster support testID or another approach to be queried.
   it("displays the correct gender icon based on player gender", () => {
     const { getByTestId } = render(
       <ThemeProvider theme={themes.dark}>
@@ -47,18 +47,31 @@ describe("<PlayerSelected />", () => {
   });
 
   it("calls editPlayer and updates the socket channel on player stats change", async () => {
+    const mockEditPlayer = require("../../../../storage/player").editPlayer;
+    const mockPush = jest.fn();
+    const mockChannel = { push: mockPush };
+    const MockedChannelInstance = new MockedChannel("");
+
     const { getByTestId } = render(
-      <ThemeProvider theme={themes.dark}>
-        <PlayerSelected initialPlayer={initialProps} />
-      </ThemeProvider>
+      <SocketContext.Provider value={{ channel: MockedChannelInstance }}>
+        <ThemeProvider theme={themes.dark}>
+          <PlayerSelected initialPlayer={initialProps} />
+        </ThemeProvider>
+      </SocketContext.Provider>
     );
 
-    const levelUpArrow = getByTestId("level-increment-button"); // Assuming StatAdjuster for level has this testID for up arrow
+    const levelUpArrow = getByTestId("level-increment-button");
     fireEvent.press(levelUpArrow);
 
     await waitFor(() => {
-      // Verify if the editPlayer function and socket channel were updated correctly
-      // You may need to add the appropriate mocks and assertions here
+      expect(mockEditPlayer).toHaveBeenCalledWith({
+        ...initialProps,
+        level: initialProps.level + 1
+      });
+      expect(MockedChannelInstance.push).toHaveBeenCalledWith("edit_player", {
+        ...initialProps,
+        level: initialProps.level + 1
+      });
     });
   });
 
@@ -77,6 +90,6 @@ describe("<PlayerSelected />", () => {
     );
 
     expect(getByText("Jane")).toBeTruthy();
-    expect(getByText("17")).toBeTruthy(); // New force value after power is updated to 7 (10 + 7)
+    expect(getByText("17")).toBeTruthy();
   });
 });

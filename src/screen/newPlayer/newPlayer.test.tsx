@@ -7,8 +7,8 @@ import {
   savePlayer as originalSavePlayer,
   playerType
 } from "../../storage/player";
+
 import * as PhoenixMocks from "phoenix";
-import * as socketStorage from "../../storage/socket";
 
 const { Socket: MockedSocket } = PhoenixMocks;
 
@@ -20,10 +20,6 @@ jest.mock("../../storage/socket");
 
 jest.mock("phoenix");
 
-const mockedGetSocketType = socketStorage.getSocketType as jest.MockedFunction<
-  typeof socketStorage.getSocketType
->;
-
 const mockSocketInstance = new MockedSocket("");
 const mockChannelInstance = mockSocketInstance.channel("");
 
@@ -34,10 +30,6 @@ const mockedSavePlayer = savePlayer;
 
 jest.mock("@react-navigation/native", () => ({
   useNavigation: () => mockNavigation
-}));
-
-jest.mock("../../hooks/useSocket", () => ({
-  useSocket: () => ({ channel: mockChannelInstance })
 }));
 
 jest.mock("../../storage/player");
