@@ -10,16 +10,12 @@ async function generateID(): Promise<string> {
   return uuidv4().slice(0, 5);
 }
 
-async function saveRoomID(id: string): Promise<void> {
+async function saveRoomID(id: string | null): Promise<void> {
   await saveToLocalStorage("roomID", id);
 }
 
-async function getRoomID(): Promise<string> {
+async function getRoomID(): Promise<string | null> {
   let roomID = await loadFromLocalStorage<string>("roomID");
-
-  if (!roomID) {
-    roomID = await createRoomID();
-  }
 
   return roomID;
 }
