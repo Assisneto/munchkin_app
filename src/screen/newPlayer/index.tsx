@@ -11,7 +11,6 @@ import {
   ErrorText
 } from "./styles";
 import { savePlayer } from "../../storage/player";
-import { useSocket } from "../../hooks/useSocket";
 import { SocketContext } from "../../socket/socket";
 import { useNavigation } from "@react-navigation/native";
 
@@ -21,9 +20,8 @@ const FEMALE = "female";
 export const NewPlayer = () => {
   const [gender, setGender] = useState<string>(MALE);
   const [name, setName] = useState<string>("");
-  const { socketState } = useContext(SocketContext);
+  const { channel } = useContext(SocketContext);
   const [showError, setShowError] = useState<string>("");
-  const { channel } = useSocket("room:lobby");
   const navigation = useNavigation();
 
   const backToHome = () => {

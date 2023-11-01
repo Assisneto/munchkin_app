@@ -5,7 +5,7 @@ import { Gender } from "../../../../components/gender";
 
 import { editPlayer, playerType } from "../../../../storage/player";
 import { StatAdjuster } from "./statAdjuster";
-import { useSocket } from "../../../../hooks/useSocket";
+
 import { SocketContext } from "../../../../socket/socket";
 
 type Props = {
@@ -15,8 +15,7 @@ type PointKey = "level" | "power";
 
 export const PlayerSelected = ({ initialPlayer }: Props) => {
   const [player, setPlayer] = useState<playerType>(initialPlayer);
-  const { channel } = useSocket("room:lobby");
-  const { socketState } = useContext(SocketContext);
+  const { channel } = useContext(SocketContext);
 
   useEffect(() => {
     setPlayer(initialPlayer);

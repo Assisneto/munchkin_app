@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import {
   InputRoomContainer,
@@ -7,6 +7,7 @@ import {
   InputRoomTextTitle
 } from "../../styles";
 import { createRoomID } from "../../../../../../storage/room";
+import { SocketContext } from "../../../../../../socket/socket";
 
 interface CreateRoomProps {
   hideModal: () => void;
@@ -14,11 +15,13 @@ interface CreateRoomProps {
 
 export const CreateRoom: React.FC<CreateRoomProps> = ({ hideModal }) => {
   const [roomCode, setRoomCode] = useState("");
+  const { setRoomID } = useContext(SocketContext);
 
   useEffect(() => {
     const fetchRoomID = async () => {
       const roomID = await createRoomID();
       setRoomCode(roomID);
+      setRoomID(roomID);
     };
 
     fetchRoomID();

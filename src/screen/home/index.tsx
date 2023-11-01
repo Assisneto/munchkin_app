@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
-import { Circle, Container } from "./styles";
+import { useCallback, useContext, useEffect, useState } from "react";
+import { Circle, Container, RoomID, RoomIDContainer, Icons } from "./styles";
 import { throttle } from "lodash";
 
 import { AppState, AppStateStatus, FlatList } from "react-native";
@@ -16,12 +16,13 @@ import {
   savePlayer,
   savePlayers
 } from "../../storage/player";
-import { useSocket } from "../../hooks/useSocket";
-import { Icons } from "./components/header/styles";
+
+import { SocketContext } from "../../socket/socket";
+import { ModalRoomIcons } from "./components/modalRoomIcons";
 
 export const Home = () => {
   const navigation = useNavigation();
-  const { channel } = useSocket("room:lobby");
+  const { channel, roomID, setRoomID } = useContext(SocketContext);
   const [players, setPlayers] = useState<playerType[] | []>();
   const [isModalVisible, setModalVisible] = useState(false);
 
@@ -91,7 +92,7 @@ export const Home = () => {
       if (state === "active") {
         await channel?.push("request_sync", {});
       }
-    }, 1000),
+    }, 500),
     [channel]
   );
 
@@ -161,13 +162,10 @@ export const Home = () => {
         >
           <Icons name="plus-thick" size={26} />
         </Circle>
-        <Circle
-          position="left"
-          onPress={handlerRoomModal}
-          testID="toggleModalButton"
-        >
-          <Icons name="party-popper" size={26} />
-        </Circle>
+        <ModalRoomIcons handlerRoomModal={handlerRoomModal} />
+        <RoomIDContainer>
+          <RoomID>{roomID}</RoomID>
+        </RoomIDContainer>
         {isModalVisible && (
           <RoomModal isModalVisible hideModal={handlerRoomModal} />
         )}
