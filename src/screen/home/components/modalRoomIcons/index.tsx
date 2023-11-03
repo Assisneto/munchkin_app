@@ -6,16 +6,15 @@ import { saveRoomID } from "../../../../storage/room";
 
 interface ModalRoomProps {
   handlerRoomModal: () => void;
+  handlerLeaveRoomModal: () => void;
 }
 
 export const ModalRoomIcons: React.FC<ModalRoomProps> = ({
-  handlerRoomModal
+  handlerRoomModal,
+  handlerLeaveRoomModal
 }) => {
-  const { roomID, setRoomID } = useContext(SocketContext);
-  const leftRoom = async () => {
-    setRoomID(null);
-    await saveRoomID(null);
-  };
+  const { roomID } = useContext(SocketContext);
+
   return (
     <>
       {roomID === null ? (
@@ -29,7 +28,7 @@ export const ModalRoomIcons: React.FC<ModalRoomProps> = ({
       ) : (
         <Circle
           position="left"
-          onPress={() => leftRoom()}
+          onPress={handlerLeaveRoomModal}
           testID="toggleModalButton"
         >
           <Icons name="arrow-left-bold" size={26} />

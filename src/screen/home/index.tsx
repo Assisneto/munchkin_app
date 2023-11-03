@@ -26,12 +26,14 @@ import {
 
 import { SocketContext } from "../../socket/socket";
 import { ModalRoomIcons } from "./components/modalRoomIcons";
+import { LeaveRoomConfirmation } from "./components/room/components/leaveRoom";
 
 export const Home = () => {
   const navigation = useNavigation();
   const { channel, roomID } = useContext(SocketContext);
   const [players, setPlayers] = useState<playerType[] | []>();
-  const [isModalVisible, setModalVisible] = useState(false);
+  const [isRoomModalVisible, setRoomModalVisible] = useState(false);
+  const [isLeaveRoomModalVisible, setLeaveRoomModalVisible] = useState(false);
 
   const handleNewPlayer = () => {
     navigation.navigate("newPlayer");
@@ -103,8 +105,11 @@ export const Home = () => {
     [channel]
   );
 
-  const handlerRoomModal = () => {
-    setModalVisible(!isModalVisible);
+  const handlerRoomModal = (
+    modalState: boolean,
+    setModalState: (state: boolean) => void
+  ) => {
+    setModalState(!modalState);
   };
 
   useEffect(() => {
@@ -169,7 +174,14 @@ export const Home = () => {
         >
           <Icons name="plus-thick" size={26} />
         </Circle>
-        <ModalRoomIcons handlerRoomModal={handlerRoomModal} />
+        <ModalRoomIcons
+          handlerRoomModal={() =>
+            handlerRoomModal(isRoomModalVisible, setRoomModalVisible)
+          }
+          handlerLeaveRoomModal={() =>
+            handlerRoomModal(isLeaveRoomModalVisible, setLeaveRoomModalVisible)
+          }
+        />
         {roomID && (
           <RoomIDContainer>
             <RoomIDWrapper>
@@ -177,8 +189,24 @@ export const Home = () => {
             </RoomIDWrapper>
           </RoomIDContainer>
         )}
-        {isModalVisible && (
-          <RoomModal isModalVisible hideModal={handlerRoomModal} />
+        {isRoomModalVisible && (
+          <RoomModal
+            isModalVisible={isRoomModalVisible}
+            hideModal={() =>
+              handlerRoomModal(isRoomModalVisible, setRoomModalVisible)
+            }
+          />
+        )}
+        {isLeaveRoomModalVisible && (
+          <LeaveRoomConfirmation
+            isModalVisible={isLeaveRoomModalVisible}
+            hideModal={() =>
+              handlerRoomModal(
+                isLeaveRoomModalVisible,
+                setLeaveRoomModalVisible
+              )
+            }
+          />
         )}
       </Container>
     </>

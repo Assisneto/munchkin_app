@@ -1,5 +1,5 @@
 import React from "react";
-import { TouchableOpacity, View } from "react-native";
+import { TouchableOpacity } from "react-native";
 import { ButtonText, ButtonView, Line } from "../../styles";
 import { ModalView } from "../ModalViewTypes";
 
@@ -9,7 +9,7 @@ interface ShowRoomProps {
 
 export const ShowRoom: React.FC<ShowRoomProps> = ({ setCurrentView }) => {
   return (
-    <ButtonView>
+    <ButtonView direction="column">
       <TouchableOpacity onPress={() => setCurrentView(ModalView.CREATE_ROOM)}>
         <ButtonText>Criar uma sala</ButtonText>
       </TouchableOpacity>

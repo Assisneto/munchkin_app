@@ -1,16 +1,5 @@
-import {
-  Modal,
-  Button,
-  TouchableWithoutFeedback,
-  TouchableOpacity
-} from "react-native";
-import {
-  ButtonText,
-  Line,
-  ModalBackground,
-  ModalContainer,
-  ButtonView
-} from "./styles";
+import { Modal, TouchableWithoutFeedback } from "react-native";
+import { ModalBackground, ModalContainer } from "./styles";
 
 import { useState } from "react";
 import { EnterRoom } from "./components/enterRoom";
