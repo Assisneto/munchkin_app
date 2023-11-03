@@ -27,12 +27,23 @@ export const Circle = styled.TouchableOpacity<CircleProps>`
 export const RoomIDContainer = styled.View`
   position: absolute;
   bottom: 5%;
-  right: 50%;
+  right: 40%;
+  left: 40%;
+  border-width: 2px;
+  border-color: ${(props) => props.theme.colors.header};
+  border-radius: 20px;
+`;
+
+export const RoomIDWrapper = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-self: center;
+  padding: 5px 5px;
 `;
 
 export const RoomID = styled.Text`
   font-weight: bold;
-  color: ${(props) => props.theme.colors.headerText};
+  color: ${(props) => props.theme.colors.iconColor};
 `;
 
 export const Icons = styled(MaterialCommunityIcons)`

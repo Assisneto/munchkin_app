@@ -11,9 +11,11 @@ interface EnterRoomProps {
 export const EnterRoom: React.FC<EnterRoomProps> = ({ hideModal }) => {
   const [roomCode, setRoomCode] = useState("");
   const { setRoomID } = useContext(SocketContext);
-
   const handleRoomCodeChange = (text: string) => {
     setRoomCode(text);
+    if (text.length === 5) {
+      handleRoomCodeSubmit();
+    }
   };
 
   const handleRoomCodeSubmit = async () => {
@@ -23,12 +25,8 @@ export const EnterRoom: React.FC<EnterRoomProps> = ({ hideModal }) => {
 
   return (
     <InputRoomContainer>
-      <InputRoomText>Insira o codigo da Sala</InputRoomText>
-      <InputRoomName
-        value={roomCode}
-        onChangeText={handleRoomCodeChange}
-        onSubmitEditing={handleRoomCodeSubmit}
-      />
+      <InputRoomText>Insira o código da Sala</InputRoomText>
+      <InputRoomName value={roomCode} onChangeText={handleRoomCodeChange} />
     </InputRoomContainer>
   );
 };

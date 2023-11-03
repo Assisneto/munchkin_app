@@ -12,7 +12,8 @@ export const Body = styled.View`
 `;
 
 export const Name = styled.TextInput.attrs((props) => ({
-  placeholderTextColor: `${props.theme.colors.headerText}`
+  placeholderTextColor: `${props.theme.colors.headerText}`,
+  autoFocus: true
 }))`
   border-width: 1px;
   border-color: ${(props) => props.theme.colors.header};

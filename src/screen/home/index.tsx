@@ -1,8 +1,15 @@
 import { useCallback, useContext, useEffect, useState } from "react";
-import { Circle, Container, RoomID, RoomIDContainer, Icons } from "./styles";
+import {
+  Circle,
+  Container,
+  RoomID,
+  RoomIDContainer,
+  Icons,
+  RoomIDWrapper
+} from "./styles";
 import { throttle } from "lodash";
 
-import { AppState, AppStateStatus, FlatList } from "react-native";
+import { AppState, AppStateStatus, FlatList, Platform } from "react-native";
 
 import { Header } from "./components/header";
 import { Player } from "../../components/player";
@@ -22,7 +29,7 @@ import { ModalRoomIcons } from "./components/modalRoomIcons";
 
 export const Home = () => {
   const navigation = useNavigation();
-  const { channel, roomID, setRoomID } = useContext(SocketContext);
+  const { channel, roomID } = useContext(SocketContext);
   const [players, setPlayers] = useState<playerType[] | []>();
   const [isModalVisible, setModalVisible] = useState(false);
 
@@ -163,9 +170,13 @@ export const Home = () => {
           <Icons name="plus-thick" size={26} />
         </Circle>
         <ModalRoomIcons handlerRoomModal={handlerRoomModal} />
-        <RoomIDContainer>
-          <RoomID>{roomID}</RoomID>
-        </RoomIDContainer>
+        {roomID && (
+          <RoomIDContainer>
+            <RoomIDWrapper>
+              <RoomID>{`Sala: ${roomID}`}</RoomID>
+            </RoomIDWrapper>
+          </RoomIDContainer>
+        )}
         {isModalVisible && (
           <RoomModal isModalVisible hideModal={handlerRoomModal} />
         )}
