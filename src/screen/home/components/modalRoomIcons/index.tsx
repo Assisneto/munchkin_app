@@ -2,7 +2,6 @@ import React, { useContext } from "react";
 
 import { Circle, Icons } from "../../styles";
 import { SocketContext } from "../../../../socket/socket";
-import { saveRoomID } from "../../../../storage/room";
 
 interface ModalRoomProps {
   handlerRoomModal: () => void;
