@@ -1,14 +1,17 @@
 import styled from "styled-components/native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-export const Container = styled.View`
+export const Container = styled(SafeAreaView).attrs({
+  edges: { top: "additive" }
+})`
   width: 100%;
-  height: 100px;
   background-color: ${(props) => props.theme.colors.header};
   flex-direction: row;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
   padding: 0 10px;
+  padding-top: 5px;
 `;
 export const Title = styled.Text`
   padding-left: 20px;
