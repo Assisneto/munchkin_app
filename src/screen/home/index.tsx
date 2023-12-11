@@ -7,9 +7,8 @@ import {
   Icons,
   RoomIDWrapper
 } from "./styles";
-import { throttle } from "lodash";
 
-import { AppState, AppStateStatus, FlatList, Platform } from "react-native";
+import { FlatList } from "react-native";
 
 import { Header } from "./components/header";
 import { Player } from "../../components/player";
@@ -96,28 +95,12 @@ export const Home = () => {
     }
   };
 
-  const handlerAppState = useCallback(
-    throttle(async (state: AppStateStatus) => {
-      if (state === "active") {
-        await channel?.push("request_sync", {});
-      }
-    }, 500),
-    [channel]
-  );
-
   const handlerRoomModal = (
     modalState: boolean,
     setModalState: (state: boolean) => void
   ) => {
     setModalState(!modalState);
   };
-
-  useEffect(() => {
-    const subscription = AppState.addEventListener("change", handlerAppState);
-    return () => {
-      subscription.remove();
-    };
-  }, [handlerAppState]);
 
   useEffect(() => {
     channel?.on("create_player", onCreatePlayer);

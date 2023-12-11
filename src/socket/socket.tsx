@@ -1,6 +1,15 @@
-import React, { createContext, useEffect, useRef, useState } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useEffect,
+  useRef,
+  useState
+} from "react";
 import { Channel, Socket } from "phoenix";
 import { getRoomID } from "../storage/room";
+import { useNetInfo } from "@react-native-community/netinfo";
+import { AppState, AppStateStatus, Platform } from "react-native";
+import { throttle } from "lodash";
 
 interface SocketContextType {
   socket: Socket | null;
@@ -23,10 +32,31 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
   const channelRef = useRef<Channel | null>(null);
   const [_, setRender] = useState(false);
   const [roomID, setRoomIDState] = useState<string | null>(null);
+  const { isConnected } = useNetInfo();
+  const [rerender, setRerender] = useState(false);
 
   const setRoomID = (newRoomID: string | null) => {
     setRoomIDState(newRoomID);
   };
+
+  const handlerAppState = (state: AppStateStatus) => {
+    console.log(state);
+
+    if (state === "active") {
+      setRerender(!rerender);
+    }
+  };
+
+  useEffect(() => {
+    if (isConnected === true) setRerender(!rerender);
+  }, [isConnected]);
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener("change", handlerAppState);
+    return () => {
+      subscription.remove();
+    };
+  }, [handlerAppState]);
 
   useEffect(() => {
     const fetchRoomID = async () => {
@@ -46,9 +76,9 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
       {}
     );
 
-    ws.onOpen(() => console.log("Connected."));
+    ws.onOpen(() => console.warn("Connected."));
     ws.onError((event) => console.log("Cannot connect.", event));
-    ws.onClose((event) => console.log("Goodbye.", event));
+    ws.onClose((event) => console.warn("Goodbye.", event, Platform.OS));
     ws.connect();
     socketRef.current = ws;
 
@@ -72,7 +102,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
         ws.disconnect();
       }
     };
-  }, [roomID]);
+  }, [roomID, rerender]);
 
   return (
     <SocketContext.Provider

@@ -121,36 +121,4 @@ describe("<Home />", () => {
       expect(mockedDeletePlayerByName).toHaveBeenCalledWith("John");
     });
   });
-
-  it("emits request_sync event when app state changes to active", async () => {
-    const MockedChannelInstance = new MockedChannel("");
-    mockedGetRoomID.mockResolvedValueOnce("room1");
-
-    const socketContextValue = {
-      socket: MockedSocket,
-      channel: MockedChannelInstance,
-      setRoomID: jest.fn(),
-      roomID: "sampleRoomID"
-    };
-
-    const { root } = render(
-      <ThemeProvider theme={themes.dark}>
-        <ThemeContext.Provider value={mockThemeContextValue}>
-          <NavigationContainer>
-            <SocketContext.Provider value={socketContextValue}>
-              <Home />
-            </SocketContext.Provider>
-          </NavigationContainer>
-        </ThemeContext.Provider>
-      </ThemeProvider>
-    );
-
-    const appStateChange = AppState.addEventListener.mock.calls[0][1];
-
-    await act(() => {
-      appStateChange("active");
-    });
-
-    expect(MockedChannelInstance.push).toHaveBeenCalledWith("request_sync", {});
-  });
 });

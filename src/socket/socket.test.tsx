@@ -6,6 +6,12 @@ import * as roomStorage from "../storage/room";
 
 jest.mock("../storage/room");
 
+jest.mock("@react-native-community/netinfo", () => ({
+  useNetInfo: () => ({
+    isConnected: true
+  })
+}));
+
 const mockedGetRoomID = roomStorage.getRoomID as jest.MockedFunction<
   typeof roomStorage.getRoomID
 >;
