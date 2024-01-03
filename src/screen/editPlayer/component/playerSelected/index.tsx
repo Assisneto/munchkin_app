@@ -1,16 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
-
 import { Container, Name, Title, Number, RowContainer } from "./styles";
 import { Gender } from "../../../../components/gender";
-
 import { editPlayer, playerType } from "../../../../storage/player";
 import { StatAdjuster } from "./statAdjuster";
-
 import { SocketContext } from "../../../../socket/socket";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
-type Props = {
-  initialPlayer: playerType;
-};
+type Props = { initialPlayer: playerType };
 type PointKey = "level" | "power";
 
 export const PlayerSelected = ({ initialPlayer }: Props) => {
@@ -21,15 +17,10 @@ export const PlayerSelected = ({ initialPlayer }: Props) => {
     setPlayer(initialPlayer);
   }, [initialPlayer]);
 
-  const handlerEdit = async (key: PointKey, amount: number) => {
-    const updatedPlayer = {
-      ...player,
-      [key]: player[key] + amount
-    };
+  const updatePlayer = async (updatedPlayer: playerType) => {
     try {
       await editPlayer(updatedPlayer);
       setPlayer(updatedPlayer);
-
       if (channel) {
         channel.push("edit_player", updatedPlayer);
       }
@@ -38,12 +29,27 @@ export const PlayerSelected = ({ initialPlayer }: Props) => {
     }
   };
 
+  const handlerEdit = async (key: PointKey, amount: number) => {
+    const updatedPlayer = { ...player, [key]: player[key] + amount };
+    updatePlayer(updatedPlayer);
+  };
+
+  const handlerEditSex = async () => {
+    const updatedPlayer: playerType = {
+      ...player,
+      gender: player.gender === "male" ? "female" : "male"
+    };
+    updatePlayer(updatedPlayer);
+  };
+
   return (
     <Container>
       <Name testID="playerSelectedName">{player.name}</Name>
       <Title>Força</Title>
       <Number>{player.level + player.power}</Number>
-      <Gender gender={player.gender} size={30} />
+      <TouchableOpacity onPress={handlerEditSex}>
+        <Gender gender={player.gender} size={30} />
+      </TouchableOpacity>
       <RowContainer>
         <StatAdjuster
           title="Nível"
