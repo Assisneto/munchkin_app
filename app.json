@@ -15,6 +15,7 @@
     "ios": {
       "supportsTablet": true
     },
+    "androidStatusBar": { "translucent": true, "hidden": false },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
@@ -39,7 +40,8 @@
             "usesCleartextTraffic": true
           }
         }
-      ]
+      ],
+      "expo-localization"
     ]
   }
 }
