@@ -11,8 +11,8 @@ export const Container = styled(SafeAreaView).attrs({
   align-items: center;
   justify-content: space-between;
   padding: 0 10px;
-  padding-top: 5px;
 `;
+
 export const Title = styled.Text`
   padding-left: 20px;
   font-size: 20px;
@@ -21,10 +21,11 @@ export const Title = styled.Text`
 `;
 
 export const Options = styled.View`
-  flex-direction: row;
-  align-items: center;
+  flex-direction: row-reverse;
+  align-items: flex-end;
   justify-content: space-between;
   padding-bottom: 10px;
+  padding-left: 20px;
   flex: 0.2;
 `;
 export const Icons = styled(MaterialCommunityIcons)`

@@ -1,11 +1,26 @@
-import { Container, Icons, Options, Title, AlignWrapper } from "./styles";
-
+import { useState } from "react";
+import { Container, Icons, Options, AlignWrapper } from "./styles";
 import { TouchableOpacity } from "react-native";
-
 import { useNavigation } from "@react-navigation/native";
+
+import { Dice } from "./../../../../components/dice";
+
+const ICONSIZE = 26;
 
 export const Header = () => {
   const navigation = useNavigation();
+  const [showDiceModal, setShowDiceModal] = useState<boolean>(false);
+  const [diceRoll, setDiceRoll] = useState<number>(1);
+
+  const rollDice = () => {
+    const roll = Math.floor(Math.random() * 6) + 1;
+    setDiceRoll(roll);
+  };
+
+  const closeModal = () => {
+    setShowDiceModal(false);
+  };
+
   const backToHome = () => {
     navigation.goBack();
   };
@@ -21,13 +36,21 @@ export const Header = () => {
         />
       </AlignWrapper>
       <Options>
-        <TouchableOpacity>
-          <Icons name="dice-multiple" size={26} />
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Icons name="cog" size={26} />
+        <TouchableOpacity
+          onPress={() => {
+            rollDice();
+            setShowDiceModal(!showDiceModal);
+          }}
+        >
+          <Icons name="dice-multiple" size={ICONSIZE} />
         </TouchableOpacity>
       </Options>
+      <Dice
+        visible={showDiceModal}
+        diceNumber={diceRoll}
+        onClose={closeModal}
+        onRoll={rollDice}
+      />
     </Container>
   );
 };
