@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 
 import { InputRoomContainer, InputRoomName, InputRoomText } from "../../styles";
 
-import { SocketContext } from "../../../../../../socket/socket";
+import { RoomEvent, SocketContext } from "../../../../../../socket/socket";
 import { saveRoomID } from "../../../../../../storage/room";
 
 interface EnterRoomProps {
@@ -11,7 +11,7 @@ interface EnterRoomProps {
 
 export const EnterRoom: React.FC<EnterRoomProps> = ({ hideModal }) => {
   const [roomCode, setRoomCode] = useState("");
-  const { setRoomID } = useContext(SocketContext);
+  const { setRoomID, setRoomEvent } = useContext(SocketContext);
   const handleRoomCodeChange = (text: string) => {
     setRoomCode(text);
 
@@ -21,6 +21,7 @@ export const EnterRoom: React.FC<EnterRoomProps> = ({ hideModal }) => {
   };
 
   const handleRoomCodeSubmit = async (roomID: string) => {
+    setRoomEvent(RoomEvent.Enter);
     setRoomID(roomID);
     saveRoomID(roomID);
     hideModal();

@@ -1,28 +1,31 @@
-import React, {
-  createContext,
-  useCallback,
-  useEffect,
-  useRef,
-  useState
-} from "react";
+import React, { createContext, useEffect, useRef, useState } from "react";
 import { Channel, Socket } from "phoenix";
-import { getRoomID } from "../storage/room";
+import { getRoomID, saveRoomID } from "../storage/room";
 import { useNetInfo } from "@react-native-community/netinfo";
-import { AppState, AppStateStatus, Platform } from "react-native";
-import { throttle } from "lodash";
+import { Alert, AppState, AppStateStatus, Platform } from "react-native";
+
+export enum RoomEvent {
+  Enter = "enter",
+  Create = "create",
+  Connect = "connect"
+}
 
 interface SocketContextType {
   socket: Socket | null;
   channel: Channel | null;
   setRoomID: (newRoomID: string | null) => void;
   roomID: string | null;
+  setRoomEvent: (newRoomType: RoomEvent) => void;
+  roomEvent: RoomEvent;
 }
 
 export const SocketContext = createContext<SocketContextType>({
   socket: null,
   channel: null,
   setRoomID: () => {},
-  roomID: null
+  roomID: null,
+  setRoomEvent: () => {},
+  roomEvent: RoomEvent.Connect
 });
 
 export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -34,16 +37,15 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
   const [roomID, setRoomIDState] = useState<string | null>(null);
   const { isConnected } = useNetInfo();
   const [rerender, setRerender] = useState(false);
+  const [roomEvent, setRoomEvent] = useState<RoomEvent>(RoomEvent.Connect);
 
   const setRoomID = (newRoomID: string | null) => {
     setRoomIDState(newRoomID);
   };
 
   const handlerAppState = (state: AppStateStatus) => {
-    console.log(state);
-
     if (state === "active") {
-      setRerender(!rerender);
+      setRoomEvent(RoomEvent.Connect);
     }
   };
 
@@ -71,25 +73,32 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
     if (roomID === null) {
       return;
     }
+
     const ws = new Socket(
       `ws://${process.env.EXPO_PUBLIC_SOCKET_URL}/socket` || "",
       {}
     );
 
-    ws.onOpen(() => console.warn("Connected."));
+    ws.onOpen(() => console.warn("Connected.", Platform.OS));
     ws.onError((event) => console.log("Cannot connect.", event));
     ws.onClose((event) => console.warn("Goodbye.", event, Platform.OS));
     ws.connect();
     socketRef.current = ws;
 
-    const ch = ws.channel(`room:${roomID}`, {});
+    const ch = ws.channel(`room:${roomID}`, { roomEvent });
 
     ch.join()
       .receive("ok", (resp) => {
-        console.log("Joined successfully", resp);
+        console.log("Joined successfully", resp, Platform.OS);
       })
       .receive("error", (resp) => {
         console.log("Unable to join", resp);
+        setRoomID(null);
+        saveRoomID(null);
+        Alert.alert(
+          "Aviso",
+          "Desculpe, a sala que você está tentando entrar não existe. Por favor, verifique o ID da sala e tente novamente."
+        );
       });
 
     channelRef.current = ch;
@@ -102,7 +111,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
         ws.disconnect();
       }
     };
-  }, [roomID, rerender]);
+  }, [roomID, rerender, roomEvent]);
 
   return (
     <SocketContext.Provider
@@ -110,7 +119,9 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
         socket: socketRef.current,
         channel: channelRef.current,
         setRoomID,
-        roomID
+        roomID,
+        setRoomEvent,
+        roomEvent
       }}
     >
       {children}
