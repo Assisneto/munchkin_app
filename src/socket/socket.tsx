@@ -33,6 +33,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const socketRef = useRef<Socket | null>(null);
   const channelRef = useRef<Channel | null>(null);
+  const reconnectIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const [_, setRender] = useState(false);
   const [roomID, setRoomIDState] = useState<string | null>(null);
   const { isConnected } = useNetInfo();
@@ -79,9 +80,20 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
       {}
     );
 
-    ws.onOpen(() => console.warn("Connected.", Platform.OS));
+    ws.onOpen(() => {
+      console.warn("Connected.", Platform.OS);
+
+      if (reconnectIntervalRef.current) {
+        clearInterval(reconnectIntervalRef.current);
+      }
+    });
     ws.onError((event) => console.log("Cannot connect.", event));
-    ws.onClose((event) => console.warn("Goodbye.", event, Platform.OS));
+    ws.onClose((event) => {
+      console.warn("Goodbye.", event, Platform.OS);
+      reconnectIntervalRef.current = setInterval(() => {
+        setRerender(!rerender);
+      }, 1000);
+    });
     ws.connect();
     socketRef.current = ws;
 
@@ -109,6 +121,9 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
       ch.leave();
       if (ws) {
         ws.disconnect();
+      }
+      if (reconnectIntervalRef.current) {
+        clearInterval(reconnectIntervalRef.current);
       }
     };
   }, [roomID, rerender, roomEvent]);
