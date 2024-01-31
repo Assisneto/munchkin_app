@@ -55,7 +55,7 @@ export const Player = ({ gender, level, name, power, deletePlayer }: Props) => {
           onPress={handleEditPlayer}
         >
           <Circle>
-            <Letter>{firstLetter(name)}</Letter>
+            <Letter>{level + power}</Letter>
           </Circle>
           <NameSexContainer>
             <Name>{name}</Name>
