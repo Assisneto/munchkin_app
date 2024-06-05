@@ -1,4 +1,4 @@
-import { render, fireEvent, act } from "@testing-library/react-native";
+import { render, fireEvent, act, waitFor } from "@testing-library/react-native";
 import React, { ReactNode } from "react";
 import { Header } from ".";
 import { ThemeProvider } from "styled-components/native";
@@ -126,9 +126,8 @@ describe("<Header />", () => {
     await act(async () => {
       fireEvent.press(modalCloseButton);
     });
-
     const diceModal = queryByTestId("diceModal");
-    expect(diceModal).toBeNull();
+    await waitFor(() => expect(diceModal.props.visible).toBe(false));
   });
   it("switches theme when the theme icon is pressed", async () => {
     const { getByTestId } = renderWithTheme(
