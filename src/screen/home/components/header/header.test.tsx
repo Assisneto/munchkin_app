@@ -109,26 +109,26 @@ describe("<Header />", () => {
   });
 
   it("closes the dice modal when onClose is called", async () => {
-    const { getByTestId, queryByTestId } = renderWithTheme(
+    const { getByTestId, queryByTestId, debug } = renderWithTheme(
       <Header
         players={[]}
         reloadStateFunction={mockReloadStateFunction}
         resetAllPlayersNotify={mockResetAllPlayersNotify}
       />
     );
-
     const diceIcon = getByTestId("diceIcon");
     await act(async () => {
       fireEvent.press(diceIcon);
     });
 
     const modalCloseButton = getByTestId("backgroundTouchable");
+
     await act(async () => {
       fireEvent.press(modalCloseButton);
     });
 
     const diceModal = queryByTestId("diceModal");
-    expect(diceModal.props.visible).toBe(false);
+    expect(diceModal).toBeNull();
   });
   it("switches theme when the theme icon is pressed", async () => {
     const { getByTestId } = renderWithTheme(

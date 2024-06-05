@@ -63,13 +63,13 @@ describe("<Player />", () => {
     });
   });
 
-  it("displays the first letter of the name correctly", () => {
+  it("displays the combined level and power correctly", () => {
     const { getByText } = render(
       <ThemeProvider theme={themes.dark}>
         <Player {...props} />
       </ThemeProvider>
     );
-    expect(getByText("J")).toBeTruthy();
+    expect(getByText("15")).toBeTruthy();
   });
 
   it("displays the correct gender", () => {
