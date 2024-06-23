@@ -7,15 +7,10 @@ import { useContext, useState } from "react";
 const ICONSIZE = 26;
 interface HeaderProps {
   players: playerType[] | undefined;
-  reloadStateFunction: () => Promise<void>;
   resetAllPlayersNotify: () => Promise<void>;
 }
 
-export const Header = ({
-  players,
-  reloadStateFunction,
-  resetAllPlayersNotify
-}: HeaderProps) => {
+export const Header = ({ players, resetAllPlayersNotify }: HeaderProps) => {
   const [showDiceModal, setShowDiceModal] = useState<boolean>(false);
   const [diceRoll, setDiceRoll] = useState<number>(1);
   const { setSpecificTheme, theme } = useContext(ThemeContext);
@@ -29,7 +24,6 @@ export const Header = ({
   const resetAllPlayers = async () => {
     if (players && players.length > 0) {
       await editPlayers(players, { level: 1, power: 0 });
-      await reloadStateFunction();
       await resetAllPlayersNotify();
     }
   };
