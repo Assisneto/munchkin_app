@@ -10,9 +10,9 @@ import {
   RadioButton,
   ErrorText
 } from "./styles";
-import { savePlayer } from "../../storage/player";
 import { SocketContext } from "../../socket/socket";
 import { useNavigation } from "@react-navigation/native";
+import { RoomContext } from "../../context/room";
 
 const MALE = "male";
 const FEMALE = "female";
@@ -23,6 +23,7 @@ export const NewPlayer = () => {
   const { channel } = useContext(SocketContext);
   const [showError, setShowError] = useState<string>("");
   const navigation = useNavigation();
+  const { savePlayer } = useContext(RoomContext);
 
   const backToHome = () => {
     navigation.goBack();
@@ -38,10 +39,8 @@ export const NewPlayer = () => {
 
     try {
       await savePlayer(playerData);
+      channel?.push("new_player", playerData);
       backToHome();
-      if (channel) {
-        channel.push("new_player", playerData);
-      }
     } catch (error) {
       if (error instanceof Error) {
         setShowError(error.message);
