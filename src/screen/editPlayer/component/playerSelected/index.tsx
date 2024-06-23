@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Container, Name, Title, Number, RowContainer } from "./styles";
 import { Gender } from "../../../../components/gender";
-import { editPlayer, playerType } from "../../../../storage/player";
+import { playerType } from "../../../../storage/player";
 import { StatAdjuster } from "./statAdjuster";
 import { SocketContext } from "../../../../socket/socket";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { RoomContext } from "../../../../context/room";
 
 type Props = { initialPlayer: playerType };
 type PointKey = "level" | "power";
@@ -12,6 +13,7 @@ type PointKey = "level" | "power";
 export const PlayerSelected = ({ initialPlayer }: Props) => {
   const [player, setPlayer] = useState<playerType>(initialPlayer);
   const { channel } = useContext(SocketContext);
+  const { editPlayer } = useContext(RoomContext);
 
   useEffect(() => {
     setPlayer(initialPlayer);

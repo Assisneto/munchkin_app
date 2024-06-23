@@ -1,16 +1,14 @@
-import React, { useCallback, useState } from "react";
-import { useRoute } from "@react-navigation/native";
+import React, { useCallback, useContext, useEffect, useState } from "react";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { Container } from "./styles";
 import { Header } from "./component/header";
-import {
-  deletePlayerByName,
-  getPlayers,
-  playerType
-} from "../../storage/player";
+import { playerType } from "../../storage/player";
 import { Player } from "../../components/player";
 import { FlatList } from "react-native-gesture-handler";
 import { useFocusEffect } from "@react-navigation/native";
 import { PlayerSelected } from "./component/playerSelected";
+import { RoomContext } from "../../context/room";
+import { SocketContext } from "../../socket/socket";
 
 type RouteParams = {
   name: string;
@@ -33,6 +31,9 @@ const filterPlayersByName = (players: playerType[], name: string) =>
   );
 
 export const EditPlayer = () => {
+  const { players: playerSaved, deletePlayer } = useContext(RoomContext);
+  const navigation = useNavigation();
+  const { channel } = useContext(SocketContext);
   const [players, setPlayers] = useState<playerType[] | []>();
   const [player, setPlayer] = useState<playerType>({
     name: "",
@@ -45,21 +46,22 @@ export const EditPlayer = () => {
   const { name } = route.params as RouteParams;
 
   const showPlayers = async () => {
-    const players = await getPlayers();
-
     const { filteredPlayers, remainingPlayers } = filterPlayersByName(
-      players,
+      playerSaved,
       name
     );
+
+    if (remainingPlayers.length === 0) {
+      navigation.navigate("home");
+    }
 
     setPlayer(remainingPlayers[0]);
     setPlayers(filteredPlayers);
   };
 
-  const deletePlayer = async (name: string) => {
-    await deletePlayerByName(name);
-    const players = await getPlayers();
-    return setPlayers(players);
+  const onDeletePlayer = async (name: string) => {
+    deletePlayer(name);
+    channel?.push("delete_player", { name });
   };
 
   useFocusEffect(
@@ -67,7 +69,9 @@ export const EditPlayer = () => {
       showPlayers();
     }, [name])
   );
-
+  useEffect(() => {
+    showPlayers();
+  }, [playerSaved]);
   return (
     <>
       <Header />
@@ -82,7 +86,7 @@ export const EditPlayer = () => {
                 level={item.level}
                 name={item.name}
                 power={item.power}
-                deletePlayer={deletePlayer}
+                deletePlayer={onDeletePlayer}
               />
             );
           }}
