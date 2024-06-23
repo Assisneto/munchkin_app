@@ -13,8 +13,7 @@ import { FlatList } from "react-native";
 import { Header } from "./components/header";
 import { Player } from "../../components/player";
 import { RoomModal } from "./components/room";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { deletePlayerByName } from "../../storage/player";
+import { useNavigation } from "@react-navigation/native";
 
 import { SocketContext } from "../../socket/socket";
 import { ModalRoomIcons } from "./components/modalRoomIcons";
@@ -24,7 +23,7 @@ import { RoomContext } from "../../context/room";
 export const Home = () => {
   const navigation = useNavigation();
   const { channel, roomID } = useContext(SocketContext);
-  const { players } = useContext(RoomContext);
+  const { players, deletePlayer } = useContext(RoomContext);
   const [isRoomModalVisible, setRoomModalVisible] = useState(false);
   const [isLeaveRoomModalVisible, setLeaveRoomModalVisible] = useState(false);
 
@@ -34,11 +33,8 @@ export const Home = () => {
     await channel?.push("reset_all_players", {});
   };
 
-  const deletePlayerLocal = async (name: string) =>
-    await deletePlayerByName(name);
-
   const deletePlayerAndNotify = async (name: string) => {
-    await deletePlayerLocal(name);
+    await deletePlayer(name);
     channel?.push("delete_player", { name });
   };
 

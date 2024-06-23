@@ -12,11 +12,15 @@ import {
 interface RoomContextType {
   players: playerType[];
   savePlayer: (player: playerType) => void;
+  editPlayer: (player: playerType) => void;
+  deletePlayer: (name: string) => void;
 }
 
 export const RoomContext = createContext<RoomContextType>({
   players: [],
-  savePlayer: () => {}
+  savePlayer: () => {},
+  editPlayer: () => {},
+  deletePlayer: () => {}
 });
 
 export const RoomProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -93,7 +97,14 @@ export const RoomProvider: React.FC<{ children: React.ReactNode }> = ({
   }, []);
 
   return (
-    <RoomContext.Provider value={{ players, savePlayer: savePlayerAndUpdate }}>
+    <RoomContext.Provider
+      value={{
+        players,
+        savePlayer: savePlayerAndUpdate,
+        editPlayer: handleEditPlayer,
+        deletePlayer: handleDeletePlayer
+      }}
+    >
       {children}
     </RoomContext.Provider>
   );
