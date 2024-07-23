@@ -34,11 +34,7 @@ describe("<Header />", () => {
 
   it("renders correctly", () => {
     const { getByText, getByTestId } = renderWithTheme(
-      <Header
-        players={[]}
-        reloadStateFunction={mockReloadStateFunction}
-        resetAllPlayersNotify={mockResetAllPlayersNotify}
-      />
+      <Header players={[]} resetAllPlayersNotify={mockResetAllPlayersNotify} />
     );
 
     expect(getByText("Munchkins")).toBeTruthy();
@@ -54,7 +50,6 @@ describe("<Header />", () => {
     const { getByTestId } = renderWithTheme(
       <Header
         players={players}
-        reloadStateFunction={mockReloadStateFunction}
         resetAllPlayersNotify={mockResetAllPlayersNotify}
       />
     );
@@ -67,17 +62,12 @@ describe("<Header />", () => {
       level: 1,
       power: 0
     });
-    expect(mockReloadStateFunction).toHaveBeenCalledTimes(1);
     expect(mockResetAllPlayersNotify).toHaveBeenCalledTimes(1);
   });
 
   it("does not reset players when there are none", async () => {
     const { getByTestId } = renderWithTheme(
-      <Header
-        players={[]}
-        reloadStateFunction={mockReloadStateFunction}
-        resetAllPlayersNotify={mockResetAllPlayersNotify}
-      />
+      <Header players={[]} resetAllPlayersNotify={mockResetAllPlayersNotify} />
     );
 
     const resetButton = getByTestId("resetButton");
@@ -92,11 +82,7 @@ describe("<Header />", () => {
 
   it("rolls the dice and shows the dice modal when dice icon is pressed", async () => {
     const { getByTestId } = renderWithTheme(
-      <Header
-        players={[]}
-        reloadStateFunction={mockReloadStateFunction}
-        resetAllPlayersNotify={mockResetAllPlayersNotify}
-      />
+      <Header players={[]} resetAllPlayersNotify={mockResetAllPlayersNotify} />
     );
 
     const diceIcon = getByTestId("diceIcon");
@@ -110,11 +96,7 @@ describe("<Header />", () => {
 
   it("closes the dice modal when onClose is called", async () => {
     const { getByTestId, queryByTestId, debug } = renderWithTheme(
-      <Header
-        players={[]}
-        reloadStateFunction={mockReloadStateFunction}
-        resetAllPlayersNotify={mockResetAllPlayersNotify}
-      />
+      <Header players={[]} resetAllPlayersNotify={mockResetAllPlayersNotify} />
     );
     const diceIcon = getByTestId("diceIcon");
     await act(async () => {
@@ -127,15 +109,11 @@ describe("<Header />", () => {
       fireEvent.press(modalCloseButton);
     });
     const diceModal = queryByTestId("diceModal");
-    await waitFor(() => expect(diceModal.props.visible).toBe(false));
+    await waitFor(() => expect(diceModal).toBeNull());
   });
   it("switches theme when the theme icon is pressed", async () => {
     const { getByTestId } = renderWithTheme(
-      <Header
-        players={[]}
-        reloadStateFunction={mockReloadStateFunction}
-        resetAllPlayersNotify={mockResetAllPlayersNotify}
-      />
+      <Header players={[]} resetAllPlayersNotify={mockResetAllPlayersNotify} />
     );
 
     const themeSwitchIcon = getByTestId("theme-switch-icon");

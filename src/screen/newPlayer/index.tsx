@@ -57,6 +57,7 @@ export const NewPlayer = () => {
         <Name
           testID="nameInput"
           placeholder="Nome"
+          value={name}
           onChangeText={(value) => {
             setName(value);
             showError ? setShowError("") : "";

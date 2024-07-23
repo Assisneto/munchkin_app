@@ -4,22 +4,12 @@ import { Home } from ".";
 import { ThemeProvider } from "styled-components/native";
 import { ThemeContext, ThemeType, themes } from "../../theme/theme";
 import { NavigationContainer } from "@react-navigation/native";
-import { SocketContext } from "../../socket/socket";
-import { deletePlayerByName, getPlayers } from "../../storage/player";
-import { AppState } from "react-native";
-import * as PhoenixMocks from "phoenix";
-import * as roomStorage from "../../storage/room";
-const { Socket: MockedSocket, Channel: MockedChannel } = PhoenixMocks;
+import { RoomContext } from "../../context/room";
 
 const mockUseFocusEffectCallback = jest.fn();
 
 jest.mock("../../storage/room");
 
-const mockedGetRoomID = roomStorage.getRoomID as jest.MockedFunction<
-  typeof roomStorage.getRoomID
->;
-
-const mockedDeletePlayerByName = deletePlayerByName as jest.Mock;
 const mockNavigation = { navigate: jest.fn(), goBack: jest.fn() };
 
 jest.mock("../../storage/player");
@@ -39,24 +29,37 @@ const mockThemeContextValue = {
   setSpecificTheme: jest.fn()
 };
 
+const dummyPlayers = [
+  { name: "John", gender: "male", level: 5, power: 2 },
+  { name: "Jane", gender: "female", level: 10, power: 7 }
+];
+
+const mockRoomContextValue = {
+  players: dummyPlayers,
+  savePlayer: jest.fn(),
+  editPlayer: jest.fn(),
+  deletePlayer: jest.fn((name) => {
+    mockRoomContextValue.players = mockRoomContextValue.players.filter(
+      (player) => player.name !== name
+    );
+  })
+};
+
 const renderWithProviders = (children: ReactNode) => {
   return render(
     <ThemeProvider theme={themes.dark}>
       <ThemeContext.Provider value={mockThemeContextValue}>
-        <NavigationContainer>{children}</NavigationContainer>
+        <RoomContext.Provider value={mockRoomContextValue}>
+          <NavigationContainer>{children}</NavigationContainer>
+        </RoomContext.Provider>
       </ThemeContext.Provider>
     </ThemeProvider>
   );
 };
 
 describe("<Home />", () => {
-  const dummyPlayers = [
-    { name: "John", gender: "male", level: 5, power: 2 },
-    { name: "Jane", gender: "female", level: 10, power: 7 }
-  ];
-
   beforeEach(() => {
-    (getPlayers as jest.Mock).mockResolvedValue(dummyPlayers);
+    jest.clearAllMocks();
   });
 
   it("renders correctly", () => {
@@ -106,7 +109,7 @@ describe("<Home />", () => {
   });
 
   it("deletes a player when the delete action is pressed in Player component", async () => {
-    const { findByTestId, queryByText, debug } = renderWithProviders(<Home />);
+    const { findByTestId } = renderWithProviders(<Home />);
 
     act(() => {
       mockUseFocusEffectCallback();
@@ -118,7 +121,7 @@ describe("<Home />", () => {
     });
 
     await waitFor(() => {
-      expect(mockedDeletePlayerByName).toHaveBeenCalledWith("John");
+      expect(mockRoomContextValue.deletePlayer).toHaveBeenCalledWith("John");
     });
   });
 });
