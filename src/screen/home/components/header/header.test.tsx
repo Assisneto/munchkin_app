@@ -1,4 +1,4 @@
-import { render, fireEvent, act, waitFor } from "@testing-library/react-native";
+import { render, fireEvent, waitFor, act } from "@testing-library/react-native";
 import React, { ReactNode } from "react";
 import { Header } from ".";
 import { ThemeProvider } from "styled-components/native";
@@ -95,7 +95,7 @@ describe("<Header />", () => {
   });
 
   it("closes the dice modal when onClose is called", async () => {
-    const { getByTestId, queryByTestId, debug } = renderWithTheme(
+    const { getByTestId, queryByTestId } = renderWithTheme(
       <Header players={[]} resetAllPlayersNotify={mockResetAllPlayersNotify} />
     );
     const diceIcon = getByTestId("diceIcon");
@@ -109,8 +109,9 @@ describe("<Header />", () => {
       fireEvent.press(modalCloseButton);
     });
     const diceModal = queryByTestId("diceModal");
-    await waitFor(() => expect(diceModal).toBeNull());
+    await waitFor(() => expect(diceModal.props.visible).toBe(false));
   });
+
   it("switches theme when the theme icon is pressed", async () => {
     const { getByTestId } = renderWithTheme(
       <Header players={[]} resetAllPlayersNotify={mockResetAllPlayersNotify} />
