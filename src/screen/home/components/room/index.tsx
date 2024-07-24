@@ -38,7 +38,7 @@ export const RoomModal: React.FC<RoomModalProps> = ({
       visible={isModalVisible}
       onRequestClose={hideModal}
     >
-      <TouchableWithoutFeedback onPress={hideModal}>
+      <TouchableWithoutFeedback onPress={hideModal} testID="modalBackground">
         <ModalBackground>
           <TouchableWithoutFeedback>
             <ModalContainer>{content}</ModalContainer>

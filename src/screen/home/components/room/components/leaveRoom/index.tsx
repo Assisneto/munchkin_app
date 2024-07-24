@@ -8,11 +8,7 @@ import {
   ModalContainer
 } from "../../styles";
 
-import {
-  TouchableWithoutFeedback,
-  TouchableOpacity,
-  Modal
-} from "react-native";
+import { TouchableWithoutFeedback, Modal } from "react-native";
 import { SocketContext } from "../../../../../../socket/socket";
 import { saveRoomID } from "../../../../../../storage/room";
 
