@@ -30,9 +30,9 @@ There are already many applications for the Munchkin board game, but there is so
 
   - Shared information of all players using realtime with websocket
 
-- v3 (current)
+- v3
   - Refactoring code and add tests
-- v4 (development)
+- v4 (current)
   - Improve realtime
     - use GenStage in backend to maintain the socket state
     - Add support to rooms
