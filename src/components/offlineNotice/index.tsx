@@ -12,7 +12,7 @@ export const OfflineNotice = () => {
   }
 
   return (
-    <OfflineContainer style={{ width }}>
+    <OfflineContainer style={{ width }} testID="offline-container">
       <OfflineText>No Internet Connection</OfflineText>
     </OfflineContainer>
   );
