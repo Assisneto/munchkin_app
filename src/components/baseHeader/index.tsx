@@ -27,10 +27,15 @@ export const BaseHeader = ({
 }: BaseHeaderProps) => {
   return (
     <>
-      <Container>
+      <Container testID="headerContainer">
         <AlignWrapper>
           {leftIconName && (
-            <Icons name={leftIconName} size={34} onPress={onLeftIconPress} />
+            <Icons
+              name={leftIconName}
+              size={34}
+              onPress={onLeftIconPress}
+              testID="back-icon"
+            />
           )}
           {title && <Title>{title}</Title>}
         </AlignWrapper>
