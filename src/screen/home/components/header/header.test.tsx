@@ -116,7 +116,9 @@ describe("<Header />", () => {
       fireEvent.press(modalCloseButton);
     });
     const diceModal = queryByTestId("diceModal");
-    await waitFor(() => expect(diceModal.props.visible).toBe(false));
+    await waitFor(() => {
+      expect(queryByTestId("diceModal")).toBeNull();
+    });
   });
 
   it("switches theme when the theme icon is pressed", async () => {

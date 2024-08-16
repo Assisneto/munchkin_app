@@ -95,8 +95,6 @@ describe("<LeaveRoomConfirmation />", () => {
         />
       </SocketContext.Provider>
     );
-    await waitFor(() =>
-      expect(queryByTestId("leaveRoomModal").props.visible).toBe(false)
-    );
+    await waitFor(() => expect(queryByTestId("leaveRoomModal")).toBeNull());
   });
 });
