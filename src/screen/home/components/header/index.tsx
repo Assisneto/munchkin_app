@@ -1,10 +1,14 @@
+import React, { useState, useContext } from "react";
+import { TouchableOpacity } from "react-native";
 import { editPlayers, playerType } from "../../../../storage/player";
-import { Container, Icons, Options, Title } from "./styles";
 import { Dice } from "./../../../../components/dice";
 import { ThemeContext, ThemeType } from "../../../../theme/theme";
-import { TouchableOpacity } from "react-native";
-import { useContext, useState } from "react";
+
+import { Icons, Options } from "./styles";
+import { BaseHeader } from "../../../../components/baseHeader";
+
 const ICONSIZE = 26;
+
 interface HeaderProps {
   players: playerType[] | undefined;
   resetAllPlayersNotify: () => Promise<void>;
@@ -27,6 +31,7 @@ export const Header = ({ players, resetAllPlayersNotify }: HeaderProps) => {
       await resetAllPlayersNotify();
     }
   };
+
   const rollDice = () => {
     const roll = Math.floor(Math.random() * 6) + 1;
     setDiceRoll(roll);
@@ -38,39 +43,38 @@ export const Header = ({ players, resetAllPlayersNotify }: HeaderProps) => {
 
   return (
     <>
-      <Container testID="headerContainer">
-        <Title>Munchkins</Title>
-        <Title></Title>
-        <Options>
-          <TouchableOpacity
-            testID="resetButton"
-            onPress={() => resetAllPlayers()}
-          >
-            <Icons name="backup-restore" size={ICONSIZE} />
-          </TouchableOpacity>
+      <BaseHeader
+        title="Munchkins"
+        additionalRightIcons={
+          <Options>
+            <TouchableOpacity onPress={resetAllPlayers} testID="resetButton">
+              <Icons name="backup-restore" size={ICONSIZE} />
+            </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => {
-              rollDice();
-              setShowDiceModal(!showDiceModal);
-            }}
-          >
-            <Icons name="dice-multiple" size={ICONSIZE} testID="diceIcon" />
-          </TouchableOpacity>
-          <Icons
-            name="theme-light-dark"
-            size={ICONSIZE}
-            onPress={() => setSpecificTheme(nextThemeMap[theme])}
-            testID="theme-switch-icon"
-          />
-        </Options>
-        <Dice
-          visible={showDiceModal}
-          diceNumber={diceRoll}
-          onClose={closeModal}
-          onRoll={rollDice}
-        />
-      </Container>
+            <TouchableOpacity
+              onPress={() => {
+                rollDice();
+                setShowDiceModal(!showDiceModal);
+              }}
+            >
+              <Icons name="dice-multiple" size={ICONSIZE} testID="diceIcon" />
+            </TouchableOpacity>
+
+            <Icons
+              name="theme-light-dark"
+              size={ICONSIZE}
+              onPress={() => setSpecificTheme(nextThemeMap[theme])}
+              testID="theme-switch-icon"
+            />
+          </Options>
+        }
+      />
+      <Dice
+        visible={showDiceModal}
+        diceNumber={diceRoll}
+        onClose={closeModal}
+        onRoll={rollDice}
+      />
     </>
   );
 };

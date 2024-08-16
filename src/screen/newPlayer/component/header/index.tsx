@@ -1,28 +1,24 @@
-import { Container, Icons, Options, Title, AlignWrapper } from "./styles";
-
+import React from "react";
 import { TouchableOpacity } from "react-native";
-
 import { useNavigation } from "@react-navigation/native";
+import { BaseHeader } from "../../../../components/baseHeader";
+import { Icons, Options } from "./styles";
 
 export const Header = ({ savePlayer }: { savePlayer: () => Promise<void> }) => {
   const navigation = useNavigation();
 
   return (
-    <Container>
-      <AlignWrapper>
-        <Icons
-          name="chevron-left"
-          testID="back-button"
-          size={34}
-          onPress={navigation.goBack}
-        />
-        <Title>Novo Munchkin</Title>
-      </AlignWrapper>
-      <Options>
-        <TouchableOpacity onPress={savePlayer} testID="savePlayerButton">
-          <Icons name="check" testID="save-button" size={30} />
-        </TouchableOpacity>
-      </Options>
-    </Container>
+    <BaseHeader
+      title="Novo Munchkin"
+      leftIconName="chevron-left"
+      onLeftIconPress={navigation.goBack}
+      additionalRightIcons={
+        <Options>
+          <TouchableOpacity onPress={savePlayer} testID="savePlayerButton">
+            <Icons name="check" size={30} testID="save-button" />
+          </TouchableOpacity>
+        </Options>
+      }
+    />
   );
 };
