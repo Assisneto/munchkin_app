@@ -12,6 +12,12 @@ jest.mock("@react-navigation/native", () => ({
   useNavigation: () => mockNavigation
 }));
 
+jest.mock("@react-native-community/netinfo", () => ({
+  useNetInfo: () => ({
+    isConnected: true
+  })
+}));
+
 describe("<Header />", () => {
   const mockProps = {
     savePlayer: jest.fn(),
@@ -39,7 +45,7 @@ describe("<Header />", () => {
       </ThemeProvider>
     );
 
-    const backButton = getByTestId("back-button");
+    const backButton = getByTestId("back-icon");
     fireEvent.press(backButton);
 
     expect(mockNavigation.goBack).toHaveBeenCalled();

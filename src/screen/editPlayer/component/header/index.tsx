@@ -33,6 +33,7 @@ export const Header = () => {
                 rollDice();
                 setShowDiceModal(!showDiceModal);
               }}
+              testID="diceIcon"
             >
               <Icons name="dice-multiple" size={ICONSIZE} />
             </TouchableOpacity>

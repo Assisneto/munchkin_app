@@ -1,11 +1,17 @@
 import React from "react";
 import { render, fireEvent } from "@testing-library/react-native";
-import { Header } from "."; // Adjust path if necessary
+import { Header } from ".";
 import { ThemeProvider } from "styled-components/native";
-import { themes } from "../../../../theme/theme"; // Adjust path to your theme
+import { themes } from "../../../../theme/theme";
 
 jest.mock("@react-navigation/native", () => ({
   useNavigation: jest.fn()
+}));
+
+jest.mock("@react-native-community/netinfo", () => ({
+  useNetInfo: () => ({
+    isConnected: true
+  })
 }));
 
 describe("<Header />", () => {
@@ -27,7 +33,7 @@ describe("<Header />", () => {
       </ThemeProvider>
     );
 
-    expect(getByTestId("header-container")).toBeTruthy();
+    expect(getByTestId("headerContainer")).toBeTruthy();
   });
 
   it("navigates back when back icon is pressed", () => {

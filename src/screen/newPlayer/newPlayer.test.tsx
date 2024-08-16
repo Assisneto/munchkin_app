@@ -10,6 +10,11 @@ import * as PhoenixMocks from "phoenix";
 const { Channel: MockedChannel, Socket: MockedSocket } = PhoenixMocks;
 
 jest.mock("../../storage/player");
+jest.mock("@react-native-community/netinfo", () => ({
+  useNetInfo: () => ({
+    isConnected: true
+  })
+}));
 
 const mockNavigation = {
   goBack: jest.fn()

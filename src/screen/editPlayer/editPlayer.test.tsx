@@ -15,6 +15,12 @@ jest.mock("../../storage/player", () => ({
   deletePlayerByName: jest.fn()
 }));
 
+jest.mock("@react-native-community/netinfo", () => ({
+  useNetInfo: () => ({
+    isConnected: true
+  })
+}));
+
 jest.mock("phoenix");
 jest.mock("../../socket/socket");
 

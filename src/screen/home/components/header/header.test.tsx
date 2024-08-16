@@ -1,9 +1,16 @@
 import { render, fireEvent, waitFor, act } from "@testing-library/react-native";
+
 import React, { ReactNode } from "react";
 import { Header } from ".";
 import { ThemeProvider } from "styled-components/native";
 import { ThemeContext, ThemeType, themes } from "../../../../theme/theme";
 import { editPlayers as mockEditPlayers } from "../../../../storage/player";
+
+jest.mock("@react-native-community/netinfo", () => ({
+  useNetInfo: () => ({
+    isConnected: true
+  })
+}));
 
 const mockThemeContextValue = {
   theme: ThemeType.dark,
@@ -109,7 +116,7 @@ describe("<Header />", () => {
       fireEvent.press(modalCloseButton);
     });
     const diceModal = queryByTestId("diceModal");
-    // await waitFor(() => expect(diceModal.props.visible).toBe(false));
+    await waitFor(() => expect(diceModal.props.visible).toBe(false));
   });
 
   it("switches theme when the theme icon is pressed", async () => {

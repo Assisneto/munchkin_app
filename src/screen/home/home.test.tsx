@@ -24,6 +24,12 @@ jest.mock("@react-navigation/native", () => ({
   NavigationContainer: ({ children }: { children: ReactNode }) => children
 }));
 
+jest.mock("@react-native-community/netinfo", () => ({
+  useNetInfo: () => ({
+    isConnected: true
+  })
+}));
+
 const mockThemeContextValue = {
   theme: ThemeType.dark,
   setSpecificTheme: jest.fn()
