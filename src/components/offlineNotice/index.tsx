@@ -1,23 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Dimensions } from "react-native";
-import NetInfo from "@react-native-community/netinfo";
+import { useNetInfo } from "@react-native-community/netinfo";
 import { OfflineContainer, OfflineText } from "./styles";
 
 export const OfflineNotice = () => {
-  const [isOffline, setIsOffline] = useState(false);
   const { width } = Dimensions.get("window");
+  const { isConnected } = useNetInfo();
 
-  useEffect(() => {
-    const unsubscribe = NetInfo.addEventListener((state) => {
-      setIsOffline(!state.isConnected);
-    });
-
-    return () => {
-      unsubscribe();
-    };
-  }, []);
-
-  if (!isOffline) {
+  if (isConnected) {
     return null;
   }
 
